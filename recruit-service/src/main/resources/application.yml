@@ -1,6 +1,15 @@
+server:
+  port: 8082
+
 spring:
   application:
     name: recruit-service
+
+  config:
+    import: "optional:configserver:"   # 추가가 핵심
+  cloud:
+    config:
+      uri: http://localhost:8888       # config server 주소
 
   datasource:
     url: ${POSTGRES_URL}
@@ -26,7 +35,16 @@ app:
 
 eureka:
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
   instance:
     prefer-ip-address: true
+
+#eureka:
+#  client:
+#    register-with-eureka: false
+#    fetch-registry: false
+#  instance:
+#    prefer-ip-address: true

@@ -1,3 +1,16 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: apigateway-service
+  config:
+    import: "optional:configserver:"     # ★ Config Server에서 외부설정 당겨오기
+  cloud:
+    config:
+      uri: http://localhost:8888         # ★ Config Server 주소
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
