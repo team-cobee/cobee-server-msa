@@ -7,11 +7,6 @@ spring:
     config:
       uri: http://localhost:8888       # config server 주소
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
 
 # (선택) Eureka on/off 토글(로컬에서 굳이 등록 안 하고 싶을 때)
 eureka:

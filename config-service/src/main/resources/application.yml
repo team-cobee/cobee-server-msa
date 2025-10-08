@@ -11,9 +11,11 @@ spring:
       server:
         native:
           # ① 루트 공통 ② 서비스별 폴더(애플리케이션명으로 자동 매칭)
-          search-locations: >
-            file:../central-config,
-            file:../central-config/{application}
+          search-locations:
+            - file:${user.dir}/central-config
+            - file:${user.dir}/central-config/{application}
+            - file:${user.dir}/../central-config
+            - file:${user.dir}/../central-config/{application}
         # (선택) 같은 키가 중복일 때 마지막이 이김(우선순위 제어)
         overrides: # spring-cloud 2021.x 이후는 'overrides' 대신 merge 규칙 사용, 여긴 참고용
           enabled: true

@@ -8,14 +8,17 @@ spring:
     import: "optional:configserver:"     # ★ Config Server에서 외부설정 당겨오기
   cloud:
     config:
-      uri: http://localhost:8888         # ★ Config Server 주소
+      uri: http://localhost:8888
+
     gateway:
-      server:
-        webflux:
-          routes:
-            - id: recruit
-              uri: lb://RECRUIT-SERVICE
-              predicates: Path=/recruit/**
+      enabled: true    # ← 전체 Gateway on/off (전체 비활성화하려면 false)
+      routes:
+        - id: recruit
+          uri: lb://RECRUIT-SERVICE
+          predicates:
+            - Path=/recruit/**        # 게이트웨이로 들어오는 경로
+          filters:
+            - StripPrefix=1
 eureka:
   client:
     service-url:

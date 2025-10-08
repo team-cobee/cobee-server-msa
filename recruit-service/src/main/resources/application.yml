@@ -2,10 +2,7 @@ spring:
   application:
     name: recruit-service
   config:
-    import: "optional:configserver:"   # 추가해야 연결
-  cloud:
-    config:
-      uri: http://localhost:8888       # config server 주소
+    import: "optional:configserver:http://localhost:8888"
 
 # 헬스/인포만 열기
 management:
