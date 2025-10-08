@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: apigateway-service
@@ -6,7 +9,13 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888         # ★ Config Server 주소
-
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: recruit
+              uri: lb://RECRUIT-SERVICE
+              predicates: Path=/recruit/**
 eureka:
   client:
     service-url:

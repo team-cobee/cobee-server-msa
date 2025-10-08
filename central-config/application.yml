@@ -1,0 +1,19 @@
+# 공통 관리 포인트(가능한 최소만)
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+
+# 공통 관리용 feature 스위치 (원하면 코드에서 @ConditionalOnProperty로 사용)
+features:
+  use-eureka: true
+  use-gateway: true
+
+# 운영 편의를 위한 공통 노출(필요 시)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

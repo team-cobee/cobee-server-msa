@@ -1,6 +1,3 @@
-server:
-  port: 8084
-
 spring:
   application:
     name: alarm-service
@@ -10,26 +7,16 @@ spring:
     config:
       uri: http://localhost:8888       # config server 주소
 
-  datasource:
-    url: ${POSTGRES_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-
-app:
-  backend:
-    url: ${BACKEND_URL:http://localhost:8080}
-
+# (선택) Eureka on/off 토글(로컬에서 굳이 등록 안 하고 싶을 때)
 eureka:
   client:
+    enabled: true   # false로 두면 아예 클라이언트 빈 생성 안 함
     register-with-eureka: false
     fetch-registry: false
   instance:
