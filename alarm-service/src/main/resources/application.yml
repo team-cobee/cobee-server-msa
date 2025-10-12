@@ -1,6 +1,14 @@
+server:
+  port: 8084
+
 spring:
   application:
     name: alarm-service
+  config:
+    import: "optional:configserver:"   # 추가가 핵심
+  cloud:
+    config:
+      uri: http://localhost:8888       # config server 주소
 
   datasource:
     url: ${POSTGRES_URL}
@@ -22,7 +30,7 @@ app:
 
 eureka:
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    register-with-eureka: true
+    fetch-registry: true
   instance:
     prefer-ip-address: true
