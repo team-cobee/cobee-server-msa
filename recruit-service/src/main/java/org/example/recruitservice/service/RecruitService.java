@@ -1,5 +1,6 @@
 package org.example.recruitservice.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.recruitservice.RecruitRepository;
 import org.example.recruitservice.domain.Enum.RecruitStatus;
@@ -7,11 +8,11 @@ import org.example.recruitservice.domain.RecruitPost;
 import org.example.recruitservice.dto.RecruitRequest;
 import org.example.recruitservice.dto.RecruitResponse;
 import org.example.recruitservice.dto.converter.RecruitConverter;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RecruitService {
     private final RecruitRepository recruitRepository;
 
@@ -43,5 +44,12 @@ public class RecruitService {
         recruitRepository.save(recruit);
         return RecruitConverter.baseResponse(recruit);
 
+    }
+
+    public RecruitResponse updateRecruit(Long postId, RecruitRequest recruitRequest) {
+        RecruitPost post = recruitRepository.findById(postId).orElseThrow();  // 에러 처리도 해야하는데...
+        post.updatePost(recruitRequest);
+        recruitRepository.save(post);
+        return RecruitConverter.baseResponse(post);
     }
 }

@@ -9,6 +9,7 @@ import org.example.recruitservice.domain.Enum.Gender;
 import org.example.recruitservice.domain.Enum.LifeStyle;
 import org.example.recruitservice.domain.Enum.Personality;
 import org.example.recruitservice.domain.Enum.RecruitStatus;
+import org.example.recruitservice.dto.RecruitRequest;
 
 @Entity
 @NoArgsConstructor
@@ -90,6 +91,63 @@ public class RecruitPost {
 
     @Column
     private Double regionLongitude; // 경도
+
+    public void updatePost(RecruitRequest dto) {
+        if (dto.getTitle() != null) {
+            this.title = dto.getTitle();
+        }
+        if (dto.getRecruitCount() != null) {
+            this.recruitCount = dto.getRecruitCount();
+        }
+        if (dto.getRentCostMin() != null) {
+            this.rentCostMin = dto.getRentCostMin();
+        }
+        if (dto.getRentCostMax() != null) {
+            this.rentCostMax = dto.getRentCostMax();
+        }
+        if (dto.getMonthlyCostMin() != null) {
+            this.monthlyCostMin = dto.getMonthlyCostMin();
+        }
+        if (dto.getMonthlyCostMax() != null) {
+            this.monthlyCostMax = dto.getMonthlyCostMax();
+        }
+        if (dto.getMinAge() != null) {
+            this.minAge = dto.getMinAge();
+        }
+        if (dto.getMaxAge() != null) {
+            this.maxAge = dto.getMaxAge();
+        }
+        if(dto.getGender() != null) {
+            this.preferredGender = dto.getGender();
+        }
+        if (dto.getLifestyle() != null) {
+            this.lifeStyle = dto.getLifestyle();
+        }
+        if (dto.getPersonality() != null) {
+            this.personality = dto.getPersonality();
+        }
+        if (dto.getIsSmoking() != null) {
+            this.isSmoking = dto.getIsSmoking();
+        }
+        if (dto.getIsSnoring() != null) {
+            this.isSnoring = dto.getIsSnoring();
+        }
+        if (dto.getHasPet() != null) {
+            this.hasPet = dto.getHasPet();
+        }
+        if (dto.getHasRoom() != null) {
+            this.hasRoom = dto.getHasRoom();
+        }
+        if (dto.getAddress() != null) {
+            this.address = dto.getAddress();
+        }
+        if (dto.getDetailDescription() != null) {
+            this.detailDescription = dto.getDetailDescription();
+        }
+        if (dto.getAdditionalDescription() != null) {
+            this.additionalDescription = dto.getAdditionalDescription();
+        }
+    }
 
 //    아래 속성은 추후 조정
 //    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)

@@ -22,4 +22,9 @@ public class RecruitController {
     public ResponseEntity<RecruitResponse> recruit(@RequestBody RecruitRequest recruitRequest) {
         return ResponseEntity.ok(recruitService.createRecruitPost(recruitRequest));
     }
+
+    @PatchMapping("/{postId}")
+    public ResponseEntity<RecruitResponse> recruit(@PathVariable("postId") Long postId, @RequestBody RecruitRequest recruitRequest) {
+        return ResponseEntity.ok(recruitService.updateRecruit(postId,recruitRequest));
+    }
 }
