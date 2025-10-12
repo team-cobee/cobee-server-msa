@@ -22,6 +22,9 @@ public class RecruitPost {
     private Long id;
 
     @Column
+    private Long ownerId;  // memberId 넣기
+
+    @Column
     private String title;
 
     @Column
@@ -40,14 +43,14 @@ public class RecruitPost {
     private Integer monthlyCostMax;
 
     @Column
-    @Enumerated(EnumType.STRING)
-    private Gender preferredGender;
-
-    @Column
     private Integer minAge;
 
     @Column
     private Integer maxAge;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Gender preferredGender;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -58,15 +61,12 @@ public class RecruitPost {
     private Personality personality;
 
     @Column
-    @Enumerated(EnumType.STRING)
     private Boolean isSmoking;
 
     @Column
-    @Enumerated(EnumType.STRING)
     private Boolean isSnoring;
 
     @Column
-    @Enumerated(EnumType.STRING)
     private Boolean hasPet;
 
     @Column
