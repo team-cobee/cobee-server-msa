@@ -1,0 +1,12 @@
+package org.example.recruitservice;
+
+import org.example.recruitservice.domain.RecruitPost;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface RecruitRepository extends JpaRepository<RecruitPost, Long> {
+    List<RecruitPost> findAllByOwnerId(Long id);
+}
