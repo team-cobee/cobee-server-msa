@@ -2,16 +2,14 @@ package org.example.recruitservice.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.recruitservice.RecruitRepository;
+import org.example.recruitservice.repository.RecruitRepository;
 import org.example.recruitservice.domain.Enum.RecruitStatus;
 import org.example.recruitservice.domain.RecruitPost;
 import org.example.recruitservice.dto.RecruitRequest;
 import org.example.recruitservice.dto.RecruitResponse;
 import org.example.recruitservice.dto.converter.RecruitConverter;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
