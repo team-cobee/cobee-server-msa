@@ -8,6 +8,7 @@ import org.example.recruitservice.domain.RecruitPost;
 import org.example.recruitservice.dto.RecruitRequest;
 import org.example.recruitservice.dto.RecruitResponse;
 import org.example.recruitservice.dto.converter.RecruitConverter;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -69,5 +70,15 @@ public class RecruitService {
     public List<RecruitResponse> getMyAllRecruitInfo(Long userId) {
         List<RecruitPost> recruits = recruitRepository.findAllByOwnerId(userId);
         return recruits.stream().map(RecruitConverter::baseResponse).toList();
+    }
+
+    public String deleteRecruitPost(Long postId) {
+        try{
+            recruitRepository.findById(postId).orElseThrow();  // 경우에 따른 에러 메시지 및 응답 틀 필요할듯 + 작성자가 본인인지 확인도 해야함 고민..
+            recruitRepository.deleteById(postId);
+            return "구인글 id가 "+postId+"인 구인글 삭제 성공";
+        } catch (Exception e){
+            return "구인글 삭제 불가능";
+        }
     }
 }

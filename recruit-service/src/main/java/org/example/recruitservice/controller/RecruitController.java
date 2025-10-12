@@ -45,4 +45,9 @@ public class RecruitController {
         return ResponseEntity.ok(recruitService.getMyAllRecruitInfo(userId));
     }
 
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<String> deleteRecruit(@PathVariable("postId") Long postId) {
+        return ResponseEntity.ok(recruitService.deleteRecruitPost(postId));
+    }
+
 }
