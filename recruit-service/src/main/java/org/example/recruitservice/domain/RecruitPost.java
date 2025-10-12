@@ -11,6 +11,9 @@ import org.example.recruitservice.domain.Enum.Personality;
 import org.example.recruitservice.domain.Enum.RecruitStatus;
 import org.example.recruitservice.dto.RecruitRequest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -92,6 +95,9 @@ public class RecruitPost {
     @Column
     private Double regionLongitude; // 경도
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<ApplyRecord> applyRecords = new ArrayList<>();
+
     public void updatePost(RecruitRequest dto) {
         if (dto.getTitle() != null) {
             this.title = dto.getTitle();
@@ -153,8 +159,7 @@ public class RecruitPost {
 //    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 //    private List<Comment> comments;
 //
-//    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-//    private List<ApplyRecord> applyRecords = new ArrayList<>();
+
 //
 //    @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    private List<Images> images = new ArrayList<>();
