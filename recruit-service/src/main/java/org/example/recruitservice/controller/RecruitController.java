@@ -7,13 +7,15 @@ import org.example.recruitservice.service.RecruitService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/recruit")
 @RequiredArgsConstructor
 public class RecruitController {
     private final RecruitService recruitService;
 
-    @GetMapping("")
+    @GetMapping("/test")
     public ResponseEntity<String> recruit() {
         return ResponseEntity.ok("Hello World This is Recruit");
     }
@@ -31,6 +33,11 @@ public class RecruitController {
     @GetMapping("/{postId}")
     public ResponseEntity<RecruitResponse> recruit(@PathVariable("postId") Long postId) {
         return ResponseEntity.ok(recruitService.getOneRecruitInfo(postId));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<RecruitResponse>> getAllRecruits() {
+        return ResponseEntity.ok(recruitService.getAllRecruitInfo());
     }
 
 }

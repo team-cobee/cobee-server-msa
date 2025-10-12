@@ -10,6 +10,9 @@ import org.example.recruitservice.dto.RecruitResponse;
 import org.example.recruitservice.dto.converter.RecruitConverter;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -56,5 +59,10 @@ public class RecruitService {
     public RecruitResponse getOneRecruitInfo(Long postId) {
         RecruitPost post = recruitRepository.findById(postId).orElseThrow();
         return RecruitConverter.baseResponse(post);
+    }
+
+    public List<RecruitResponse> getAllRecruitInfo() {
+        List<RecruitPost> recruits = recruitRepository.findAll();
+        return recruits.stream().map(RecruitConverter::baseResponse).toList();
     }
 }
