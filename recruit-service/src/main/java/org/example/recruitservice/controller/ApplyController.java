@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 public class ApplyController {
     private final ApplyService applyService;
 
-    @PostMapping("/{postId}")
-    public ResponseEntity<ApplyResponse> apply(@PathVariable Long postId) {
-
+    @PostMapping("/{postId}/{applier}")
+    public ResponseEntity<ApplyResponse> apply(@PathVariable Long applier, @PathVariable Long postId) {
+        return ResponseEntity.ok(applyService.applyForRecruit(applier, postId));
     }
 }
