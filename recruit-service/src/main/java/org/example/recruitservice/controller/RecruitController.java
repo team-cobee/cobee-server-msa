@@ -27,4 +27,10 @@ public class RecruitController {
     public ResponseEntity<RecruitResponse> recruit(@PathVariable("postId") Long postId, @RequestBody RecruitRequest recruitRequest) {
         return ResponseEntity.ok(recruitService.updateRecruit(postId,recruitRequest));
     }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<RecruitResponse> recruit(@PathVariable("postId") Long postId) {
+        return ResponseEntity.ok(recruitService.getOneRecruitInfo(postId));
+    }
+
 }

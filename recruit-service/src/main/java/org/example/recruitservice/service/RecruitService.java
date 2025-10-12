@@ -52,4 +52,9 @@ public class RecruitService {
         recruitRepository.save(post);
         return RecruitConverter.baseResponse(post);
     }
+
+    public RecruitResponse getOneRecruitInfo(Long postId) {
+        RecruitPost post = recruitRepository.findById(postId).orElseThrow();
+        return RecruitConverter.baseResponse(post);
+    }
 }
