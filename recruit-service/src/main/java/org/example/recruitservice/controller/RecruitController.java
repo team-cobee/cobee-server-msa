@@ -40,4 +40,9 @@ public class RecruitController {
         return ResponseEntity.ok(recruitService.getAllRecruitInfo());
     }
 
+    @GetMapping("/my")
+    public ResponseEntity<List<RecruitResponse>> getMyRecruits(@RequestParam Long userId) {
+        return ResponseEntity.ok(recruitService.getMyAllRecruitInfo(userId));
+    }
+
 }
