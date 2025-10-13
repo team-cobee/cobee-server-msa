@@ -1,4 +1,4 @@
-package org.example.recruitservice.domain;
+package org.example.recruitservice.domain.Enum;
 
 public enum MatchStatus {
     ON_WAIT,     // 지원한 후 승인 받기전 상태의 대기중

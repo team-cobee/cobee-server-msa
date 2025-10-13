@@ -4,11 +4,13 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.recruitservice.domain.ApplyRecord;
-import org.example.recruitservice.domain.MatchStatus;
+import org.example.recruitservice.domain.Enum.MatchStatus;
 import org.example.recruitservice.domain.RecruitPost;
 import org.example.recruitservice.dto.ApplicantResponse;
 import org.example.recruitservice.dto.ApplyResponse;
+import org.example.recruitservice.dto.RecruitCoreResponse;
 import org.example.recruitservice.dto.converter.ApplyConverter;
+import org.example.recruitservice.dto.converter.RecruitConverter;
 import org.example.recruitservice.repository.ApplyRepository;
 import org.example.recruitservice.repository.RecruitRepository;
 import org.springframework.stereotype.Service;
@@ -61,5 +63,10 @@ public class ApplyService {
     public List<ApplicantResponse> getMyApplicants(Long postId, Long memberId) {
         List<ApplyRecord> applyRecords = applyRepository.findMyPostAppliersExceptMe(postId, memberId);
         return applyRecords.stream().map(ApplyConverter::applicantConverter).toList();
+    }
+
+    public List<RecruitCoreResponse> getMyAppliedPostsByMatchStatus(Long memberId, MatchStatus status ) {
+        List<ApplyRecord> applyRecords = applyRepository.findApplyRecordsByAppliedMemberIdAndMatchStatus(memberId, status); // 나의 onwait
+        return applyRecords.stream().map(RecruitConverter::fromApplyToRecruit).toList();
     }
 }

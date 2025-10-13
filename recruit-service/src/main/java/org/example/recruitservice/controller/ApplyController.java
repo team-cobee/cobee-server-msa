@@ -1,9 +1,10 @@
 package org.example.recruitservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.recruitservice.domain.ApplyRecord;
+import org.example.recruitservice.domain.Enum.MatchStatus;
 import org.example.recruitservice.dto.ApplicantResponse;
 import org.example.recruitservice.dto.ApplyResponse;
+import org.example.recruitservice.dto.RecruitCoreResponse;
 import org.example.recruitservice.service.ApplyAcceptRequest;
 import org.example.recruitservice.service.ApplyService;
 import org.springframework.http.ResponseEntity;
@@ -32,5 +33,10 @@ public class ApplyController {
     public ResponseEntity<List<ApplicantResponse>> getMyAppliers(@PathVariable Long postId, @PathVariable Long memberId) {
         // 이때 memberId는 로그인한 사용자 본인 - 내가 수락할 지원자 정보
         return ResponseEntity.ok(applyService.getMyApplicants(postId, memberId));
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<RecruitCoreResponse>> getMyAppliedPostsInfo(@RequestParam Long memberId, @RequestParam MatchStatus matchStatus) {
+        return ResponseEntity.ok(applyService.getMyAppliedPostsByMatchStatus(memberId, matchStatus));
     }
 }

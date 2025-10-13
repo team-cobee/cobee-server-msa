@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.recruitservice.domain.Enum.MatchStatus;
+
 import java.time.LocalDate;
 
 @Entity
