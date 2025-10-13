@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface ApplyRepository extends JpaRepository<ApplyRecord, Long> {
+    // 나를 제외한 구인글 지원자 조회
     @Query("""
         select a
         from ApplyRecord a
@@ -21,6 +22,7 @@ public interface ApplyRepository extends JpaRepository<ApplyRecord, Long> {
     List<ApplyRecord> findMyPostAppliersExceptMe(@Param("postId") Long postId,
                                                  @Param("memberId") Long memberId);
 
+    // 나를 제외한 구인글 지원자 조회 with Status
     @Query("""
         select a
         from ApplyRecord a
@@ -32,8 +34,16 @@ public interface ApplyRepository extends JpaRepository<ApplyRecord, Long> {
                                                            @Param("memberId") Long memberId,
                                                            @Param("status") MatchStatus status);
 
+    // 내가 쓴 구인글은 제외하도록 조회
+    @Query("""
+        select a
+        from ApplyRecord a
+        where a.post.ownerId <> :memberId
+                  and a.matchStatus = :status
+        """)
     List<ApplyRecord> findApplyRecordsByAppliedMemberIdAndMatchStatus(@Param("memberId") Long memberId, @Param("status") MatchStatus status);
 
+    // 지원했는지 여부 체크하는 메서드
     Optional<ApplyRecord> findApplyRecordsByAppliedMemberIdAndPostId(@Param("memberId") Long memberId, @Param("postId") Long postId);
 
 }
