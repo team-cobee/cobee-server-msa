@@ -74,8 +74,10 @@ public class ApplyService {
         return applyRecords.stream().map(ApplyConverter::applicantConverter).toList();
     }
 
-    public List<RecruitCoreResponse> getMyAppliedPostsByMatchStatus(Long memberId, MatchStatus status ) {
-        List<ApplyRecord> applyRecords = applyRepository.findApplyRecordsByAppliedMemberIdAndMatchStatus(memberId, status); // 나의 onwait
+    public List<RecruitCoreResponse> getMyAppliedPostsByMatchStatus(Long memberId, MatchStatus matchStatus ) {
+        List<ApplyRecord> applyRecords = (matchStatus == null)
+                ? applyRepository.findApplyRecordsByAppliedMemberId(memberId)
+                : applyRepository.findApplyRecordsByAppliedMemberIdAndMatchStatus(memberId, matchStatus);
         return applyRecords.stream().map(RecruitConverter::fromApplyToRecruit).toList();
     }
 

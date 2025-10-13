@@ -34,12 +34,22 @@ public interface ApplyRepository extends JpaRepository<ApplyRecord, Long> {
                                                            @Param("memberId") Long memberId,
                                                            @Param("status") MatchStatus status);
 
-    // 내가 쓴 구인글은 제외하도록 조회
+    // 내가 쓴 글이 아닌 글에 지원한 모든 경우
+    @Query("""
+        select a
+        from ApplyRecord a
+        where a.post.ownerId <> :memberId
+                          and a.appliedMemberId = :memberId
+        """)
+    List<ApplyRecord> findApplyRecordsByAppliedMemberId(@Param("memberId") Long memberId);
+
+    // 내가 쓴 구인글은 제외하도록 조회 + 상태에 따른 조회
     @Query("""
         select a
         from ApplyRecord a
         where a.post.ownerId <> :memberId
                   and a.matchStatus = :status
+                          and a.appliedMemberId = :memberId
         """)
     List<ApplyRecord> findApplyRecordsByAppliedMemberIdAndMatchStatus(@Param("memberId") Long memberId, @Param("status") MatchStatus status);
 

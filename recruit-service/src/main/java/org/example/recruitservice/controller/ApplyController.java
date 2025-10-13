@@ -39,8 +39,9 @@ public class ApplyController {
     }
 
     @GetMapping("/my")  // 나의 매칭 상태에 따른 지원 구인글 조회 - Long memberId는 본인
-    public ResponseEntity<List<RecruitCoreResponse>> getMyAppliedPostsInfo(@RequestParam Long memberId, @RequestParam MatchStatus matchStatus) {
-        return ResponseEntity.ok(applyService.getMyAppliedPostsByMatchStatus(memberId, matchStatus));
+    public ResponseEntity<List<RecruitCoreResponse>> getMyAppliedPostsInfo(@RequestParam Long memberId,
+                                                                           @RequestParam(name = "status", required = false) MatchStatus status) {
+        return ResponseEntity.ok(applyService.getMyAppliedPostsByMatchStatus(memberId, status));
     }
 
     @GetMapping("/isApplied/{postId}") // 내가 해당 구인글에 지원했는지 여부
