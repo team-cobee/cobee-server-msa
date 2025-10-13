@@ -38,4 +38,22 @@ public class ApplyService {
             return null;
         }
     }
+
+    public ApplyResponse acceptOrReject(ApplyAcceptRequest applyAccept) {
+        // 누가 하는지에 대한거 검증 멤버 아이디 받은 이후로 설정하기?
+        try {
+            ApplyRecord applyRecord = applyRepository.findById(applyAccept.getApplyId()).orElseThrow();
+            //Long checkAuthor = applyRecord.getAppliedMemberId();
+            //if (memberId.equals(checkAuthor)) {
+            Boolean accept = applyAccept.getIsAccepted();
+            applyRecord.acceptMatching(accept);
+            applyRepository.save(applyRecord);
+            //}
+            return ApplyConverter.from(applyRecord);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            return null;
+        }
+
+    }
 }

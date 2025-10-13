@@ -3,6 +3,7 @@ package org.example.recruitservice.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.recruitservice.domain.ApplyRecord;
 import org.example.recruitservice.dto.ApplyResponse;
+import org.example.recruitservice.service.ApplyAcceptRequest;
 import org.example.recruitservice.service.ApplyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,5 +17,10 @@ public class ApplyController {
     @PostMapping("/{postId}/{applier}")
     public ResponseEntity<ApplyResponse> apply(@PathVariable Long applier, @PathVariable Long postId) {
         return ResponseEntity.ok(applyService.applyForRecruit(applier, postId));
+    }
+
+    @PostMapping("/accept")
+    public ResponseEntity<ApplyResponse> accept(@RequestBody ApplyAcceptRequest applyRecord) {
+        return ResponseEntity.ok(applyService.acceptOrReject(applyRecord));
     }
 }

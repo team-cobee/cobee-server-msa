@@ -32,4 +32,8 @@ public class ApplyRecord {
     @JoinColumn(name = "post_id")
     private RecruitPost post;
 
+    public void acceptMatching(Boolean accept) {
+        if(accept) this.matchStatus = MatchStatus.MATCHING;
+        else this.matchStatus = MatchStatus.REJECTED;
+    }
 }
