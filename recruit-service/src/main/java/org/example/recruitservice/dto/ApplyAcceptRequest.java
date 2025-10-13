@@ -1,4 +1,4 @@
-package org.example.recruitservice.service;
+package org.example.recruitservice.dto;
 
 import lombok.Getter;
 

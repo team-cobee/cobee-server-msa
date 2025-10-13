@@ -5,7 +5,7 @@ import org.example.recruitservice.domain.Enum.MatchStatus;
 import org.example.recruitservice.dto.ApplicantResponse;
 import org.example.recruitservice.dto.ApplyResponse;
 import org.example.recruitservice.dto.RecruitCoreResponse;
-import org.example.recruitservice.service.ApplyAcceptRequest;
+import org.example.recruitservice.dto.ApplyAcceptRequest;
 import org.example.recruitservice.service.ApplyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

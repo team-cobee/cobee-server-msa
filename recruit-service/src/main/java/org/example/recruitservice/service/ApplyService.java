@@ -7,13 +7,13 @@ import org.example.recruitservice.domain.ApplyRecord;
 import org.example.recruitservice.domain.Enum.MatchStatus;
 import org.example.recruitservice.domain.RecruitPost;
 import org.example.recruitservice.dto.ApplicantResponse;
+import org.example.recruitservice.dto.ApplyAcceptRequest;
 import org.example.recruitservice.dto.ApplyResponse;
 import org.example.recruitservice.dto.RecruitCoreResponse;
 import org.example.recruitservice.dto.converter.ApplyConverter;
 import org.example.recruitservice.dto.converter.RecruitConverter;
 import org.example.recruitservice.repository.ApplyRepository;
 import org.example.recruitservice.repository.RecruitRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
