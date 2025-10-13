@@ -48,7 +48,7 @@ jobs:
             
             echo "Building $SERVICE_NAME..."
             
-            docker build -t "$SERVICE_NAME" "./$SERVICE_NAME"
+            docker build -t "$SERVICE_NAME" -f "./$SERVICE_NAME/Dockerfile" .
             
             docker tag "$SERVICE_NAME" "$IMAGE_TAG"
             
