@@ -74,4 +74,18 @@ public class RecruitConverter {
                 //.applicantCount() 필요하면 나중에 - 클릭못하도록
                 .build();
     }
+
+    public static RecruitCoreResponse fromRecruit(RecruitPost post) {
+        return RecruitCoreResponse.builder()
+                .postId(post.getId())
+                .title(post.getTitle())
+                .address(post.getAddress())
+                .recruitStatus(post.getStatus())
+                .rentCostMin(post.getRentCostMin())
+                .monthlyMinCost(post.getMonthlyCostMin())
+                .recruitCount(post.getRecruitCount())
+                //.applicantCount()
+                //.commentCount()
+                .build();
+    }
 }
