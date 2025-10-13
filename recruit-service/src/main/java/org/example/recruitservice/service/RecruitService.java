@@ -2,6 +2,7 @@ package org.example.recruitservice.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.example.recruitservice.dto.RecruitCoreResponse;
 import org.example.recruitservice.repository.RecruitRepository;
 import org.example.recruitservice.domain.Enum.RecruitStatus;
 import org.example.recruitservice.domain.RecruitPost;
@@ -60,9 +61,9 @@ public class RecruitService {
         return RecruitConverter.baseResponse(post);
     }
 
-    public List<RecruitResponse> getAllRecruitInfo() {
+    public List<RecruitCoreResponse> getAllRecruitInfo() {
         List<RecruitPost> recruits = recruitRepository.findAll();
-        return recruits.stream().map(RecruitConverter::baseResponse).toList();
+        return recruits.stream().map(RecruitConverter::fromRecruit).toList();
     }
 
     public List<RecruitResponse> getMyAllRecruitInfo(Long userId) {

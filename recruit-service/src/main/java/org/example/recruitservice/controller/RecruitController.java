@@ -1,6 +1,7 @@
 package org.example.recruitservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.recruitservice.dto.RecruitCoreResponse;
 import org.example.recruitservice.dto.RecruitRequest;
 import org.example.recruitservice.dto.RecruitResponse;
 import org.example.recruitservice.service.RecruitService;
@@ -36,8 +37,7 @@ public class RecruitController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<RecruitResponse>> getAllRecruitsInfo() {
-        // TODO : 리스트업 해주는 api라 RecruitCoreResponse로 바꾸기
+    public ResponseEntity<List<RecruitCoreResponse>> getAllRecruitsInfo() {
         return ResponseEntity.ok(recruitService.getAllRecruitInfo());
     }
 
