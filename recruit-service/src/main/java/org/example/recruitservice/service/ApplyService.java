@@ -13,10 +13,12 @@ import org.example.recruitservice.dto.converter.ApplyConverter;
 import org.example.recruitservice.dto.converter.RecruitConverter;
 import org.example.recruitservice.repository.ApplyRepository;
 import org.example.recruitservice.repository.RecruitRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,15 +30,20 @@ public class ApplyService {
 
     public ApplyResponse applyForRecruit(Long memberId, Long postId) {
         try {
-            RecruitPost recruitPost = recruitRepository.findById(postId).orElseThrow();
-            ApplyRecord apply = ApplyRecord.builder()
-                    .appliedMemberId(memberId)
-                    .post(recruitPost)
-                    .matchStatus(MatchStatus.ON_WAIT)
-                    .submittedAt(LocalDate.now())
-                    .build();
-            applyRepository.save(apply);
-            return ApplyConverter.from(apply);
+            Optional<ApplyRecord> record = applyRepository.findApplyRecordsByAppliedMemberIdAndPostId(memberId, postId);
+            if  (record.isPresent()) {
+                throw new IllegalArgumentException("이미 지원하였습니다.");  // custom exception - 이미 지원하였다고 경고주고 지원못하게 하기
+            } else {
+                RecruitPost recruitPost = recruitRepository.findById(postId).orElseThrow();
+                ApplyRecord apply = ApplyRecord.builder()
+                        .appliedMemberId(memberId)
+                        .post(recruitPost)
+                        .matchStatus(MatchStatus.ON_WAIT)
+                        .submittedAt(LocalDate.now())
+                        .build();
+                applyRepository.save(apply);
+                return ApplyConverter.from(apply);
+            }
         } catch (Exception e) {
             log.info(e.getMessage());
             return null;
@@ -73,7 +80,7 @@ public class ApplyService {
     }
 
     public Boolean checkIfIAppliedThisPost(Long postId, Long memberId) {
-        ApplyRecord apply = applyRepository.findApplyRecordsByAppliedMemberIdAndPostId(postId, memberId);
-        return apply != null;
+        Optional<ApplyRecord> apply = applyRepository.findApplyRecordsByAppliedMemberIdAndPostId(postId, memberId);
+        return apply.isPresent();
     }
 }
