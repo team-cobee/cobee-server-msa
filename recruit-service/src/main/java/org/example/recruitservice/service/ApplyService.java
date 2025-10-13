@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.recruitservice.domain.ApplyRecord;
 import org.example.recruitservice.domain.MatchStatus;
 import org.example.recruitservice.domain.RecruitPost;
+import org.example.recruitservice.dto.ApplicantResponse;
 import org.example.recruitservice.dto.ApplyResponse;
 import org.example.recruitservice.dto.converter.ApplyConverter;
 import org.example.recruitservice.repository.ApplyRepository;
@@ -13,6 +14,7 @@ import org.example.recruitservice.repository.RecruitRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -54,6 +56,10 @@ public class ApplyService {
             log.info(e.getMessage());
             return null;
         }
+    }
 
+    public List<ApplicantResponse> getMyApplicants(Long postId, Long memberId) {
+        List<ApplyRecord> applyRecords = applyRepository.findMyPostAppliersExceptMe(postId, memberId);
+        return applyRecords.stream().map(ApplyConverter::applicantConverter).toList();
     }
 }
