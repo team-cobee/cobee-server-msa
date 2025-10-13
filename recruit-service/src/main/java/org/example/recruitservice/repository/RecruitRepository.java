@@ -1,4 +1,4 @@
-package org.example.recruitservice;
+package org.example.recruitservice.repository;
 
 import org.example.recruitservice.domain.RecruitPost;
 import org.springframework.data.jpa.repository.JpaRepository;
