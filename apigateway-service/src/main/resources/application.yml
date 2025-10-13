@@ -19,6 +19,9 @@ spring:
             - id: alarm
               uri: lb://ALARM-SERVICE
               predicates: Path=/alarm/**
+            - id: apply
+              uri: lb://RECRUIT-SERVICE
+              predicates: Path=/apply/**
 eureka:
   client:
     service-url:
