@@ -66,9 +66,9 @@ public class RecruitService {
         return recruits.stream().map(RecruitConverter::fromRecruit).toList();
     }
 
-    public List<RecruitResponse> getMyAllRecruitInfo(Long userId) {
+    public List<RecruitCoreResponse> getMyAllRecruitInfo(Long userId) {
         List<RecruitPost> recruits = recruitRepository.findAllByOwnerId(userId);
-        return recruits.stream().map(RecruitConverter::baseResponse).toList();
+        return recruits.stream().map(RecruitConverter::fromRecruit).toList();
     }
 
     public String deleteRecruitPost(Long postId) {

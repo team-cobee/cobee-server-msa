@@ -42,8 +42,7 @@ public class RecruitController {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<List<RecruitResponse>> getMyRecruitPostsInfo(@RequestParam Long userId) {
-        // TODO : 리스트업 해주는 api라 RecruitCoreResponse로 바꾸기
+    public ResponseEntity<List<RecruitCoreResponse>> getMyRecruitPostsInfo(@RequestParam Long userId) {
         return ResponseEntity.ok(recruitService.getMyAllRecruitInfo(userId));
     }
 
