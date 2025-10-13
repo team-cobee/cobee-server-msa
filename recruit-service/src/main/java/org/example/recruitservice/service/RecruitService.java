@@ -2,16 +2,15 @@ package org.example.recruitservice.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.recruitservice.RecruitRepository;
+import org.example.recruitservice.dto.RecruitCoreResponse;
+import org.example.recruitservice.repository.RecruitRepository;
 import org.example.recruitservice.domain.Enum.RecruitStatus;
 import org.example.recruitservice.domain.RecruitPost;
 import org.example.recruitservice.dto.RecruitRequest;
 import org.example.recruitservice.dto.RecruitResponse;
 import org.example.recruitservice.dto.converter.RecruitConverter;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -62,14 +61,14 @@ public class RecruitService {
         return RecruitConverter.baseResponse(post);
     }
 
-    public List<RecruitResponse> getAllRecruitInfo() {
+    public List<RecruitCoreResponse> getAllRecruitInfo() {
         List<RecruitPost> recruits = recruitRepository.findAll();
-        return recruits.stream().map(RecruitConverter::baseResponse).toList();
+        return recruits.stream().map(RecruitConverter::fromRecruit).toList();
     }
 
-    public List<RecruitResponse> getMyAllRecruitInfo(Long userId) {
+    public List<RecruitCoreResponse> getMyAllRecruitInfo(Long userId) {
         List<RecruitPost> recruits = recruitRepository.findAllByOwnerId(userId);
-        return recruits.stream().map(RecruitConverter::baseResponse).toList();
+        return recruits.stream().map(RecruitConverter::fromRecruit).toList();
     }
 
     public String deleteRecruitPost(Long postId) {

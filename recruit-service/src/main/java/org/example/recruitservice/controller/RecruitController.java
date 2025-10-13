@@ -1,6 +1,7 @@
 package org.example.recruitservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.recruitservice.dto.RecruitCoreResponse;
 import org.example.recruitservice.dto.RecruitRequest;
 import org.example.recruitservice.dto.RecruitResponse;
 import org.example.recruitservice.service.RecruitService;
@@ -21,27 +22,27 @@ public class RecruitController {
     }
 
     @PostMapping("")
-    public ResponseEntity<RecruitResponse> recruit(@RequestBody RecruitRequest recruitRequest) {
+    public ResponseEntity<RecruitResponse> createRecruit(@RequestBody RecruitRequest recruitRequest) {
         return ResponseEntity.ok(recruitService.createRecruitPost(recruitRequest));
     }
 
     @PatchMapping("/{postId}")
-    public ResponseEntity<RecruitResponse> recruit(@PathVariable("postId") Long postId, @RequestBody RecruitRequest recruitRequest) {
+    public ResponseEntity<RecruitResponse> updateRecruit(@PathVariable("postId") Long postId, @RequestBody RecruitRequest recruitRequest) {
         return ResponseEntity.ok(recruitService.updateRecruit(postId,recruitRequest));
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<RecruitResponse> recruit(@PathVariable("postId") Long postId) {
+    public ResponseEntity<RecruitResponse> getRecruitInfo(@PathVariable("postId") Long postId) {
         return ResponseEntity.ok(recruitService.getOneRecruitInfo(postId));
     }
 
     @GetMapping("")
-    public ResponseEntity<List<RecruitResponse>> getAllRecruits() {
+    public ResponseEntity<List<RecruitCoreResponse>> getAllRecruitsInfo() {
         return ResponseEntity.ok(recruitService.getAllRecruitInfo());
     }
 
     @GetMapping("/my")
-    public ResponseEntity<List<RecruitResponse>> getMyRecruits(@RequestParam Long userId) {
+    public ResponseEntity<List<RecruitCoreResponse>> getMyRecruitPostsInfo(@RequestParam Long userId) {
         return ResponseEntity.ok(recruitService.getMyAllRecruitInfo(userId));
     }
 
