@@ -33,4 +33,6 @@ public interface ApplyRepository extends JpaRepository<ApplyRecord, Long> {
 
     List<ApplyRecord> findApplyRecordsByAppliedMemberIdAndMatchStatus(@Param("memberId") Long memberId, @Param("status") MatchStatus status);
 
+    ApplyRecord findApplyRecordsByAppliedMemberIdAndPostId(@Param("memberId") Long memberId, @Param("postId") Long postId);
+
 }

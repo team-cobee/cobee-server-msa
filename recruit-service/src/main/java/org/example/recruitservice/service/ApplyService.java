@@ -71,4 +71,9 @@ public class ApplyService {
         List<ApplyRecord> applyRecords = applyRepository.findApplyRecordsByAppliedMemberIdAndMatchStatus(memberId, status); // 나의 onwait
         return applyRecords.stream().map(RecruitConverter::fromApplyToRecruit).toList();
     }
+
+    public Boolean checkIfIAppliedThisPost(Long postId, Long memberId) {
+        ApplyRecord apply = applyRepository.findApplyRecordsByAppliedMemberIdAndPostId(postId, memberId);
+        return apply != null;
+    }
 }
