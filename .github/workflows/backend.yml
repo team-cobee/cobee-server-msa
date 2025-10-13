@@ -30,11 +30,32 @@ jobs:
           username: ${{ secrets.NCR_USERNAME }}   # User Access Key ID
           password: ${{ secrets.NCR_PASSWORD }}   # User Secret Key
 
-      - name: Build and push
+      - name: Build and push all services
         run: |
-          docker build -t backend_img ./backend
-          docker tag backend_img ${{ env.REGISTRY }}/${{ env.REPOSITORY }}/backend_img:latest
-          docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY }}/backend_img:latest
+          SERVICES=(
+          "alarm-service" 
+          "apigateway-service" 
+          "chat-service" 
+          "config-service" 
+          "eureka-server" 
+          "member-service" 
+          "recruit-service"
+          )
+          
+          for SERVICE_NAME in "${SERVICES[@]}"
+          do
+            IMAGE_TAG="${{ env.REGISTRY }}/${{ env.REPOSITORY }}/$SERVICE_NAME:latest"
+            
+            echo "Building $SERVICE_NAME..."
+            
+            docker build -t "$SERVICE_NAME" "./$SERVICE_NAME"
+            
+            docker tag "$SERVICE_NAME" "$IMAGE_TAG"
+            
+            docker push "$IMAGE_TAG"
+            
+            echo "Successfully pushed $SERVICE_NAME to $IMAGE_TAG"
+          done
 
       - name: Image digest
         run: echo ${{ steps.meta.outputs.digest }}
