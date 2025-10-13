@@ -60,8 +60,10 @@ public class ApplyService {
         }
     }
 
-    public List<ApplicantResponse> getMyApplicants(Long postId, Long memberId) {
-        List<ApplyRecord> applyRecords = applyRepository.findMyPostAppliersExceptMe(postId, memberId);
+    public List<ApplicantResponse> getMyApplicants(Long postId, Long memberId, MatchStatus matchStatus) {
+        List<ApplyRecord> applyRecords = (matchStatus == null)
+                ? applyRepository.findMyPostAppliersExceptMe(postId, memberId)
+                : applyRepository.findMyPostAppliersExceptMeWithStatus(postId, memberId, matchStatus);
         return applyRecords.stream().map(ApplyConverter::applicantConverter).toList();
     }
 

@@ -29,14 +29,18 @@ public class ApplyController {
         return ResponseEntity.ok(applyService.acceptOrReject(applyRecord));
     }
 
+    // 특정 구인글에서의 지원자 조회 + 상태에 따른 조회
     @GetMapping("/applier/{postId}/{memberId}")
-    public ResponseEntity<List<ApplicantResponse>> getMyAppliers(@PathVariable Long postId, @PathVariable Long memberId) {
+    public ResponseEntity<List<ApplicantResponse>> getMyAppliers(
+            @PathVariable Long postId, @PathVariable Long memberId,
+            @RequestParam(name = "status", required = false) MatchStatus status) {
         // 이때 memberId는 로그인한 사용자 본인 - 내가 수락할 지원자 정보
-        return ResponseEntity.ok(applyService.getMyApplicants(postId, memberId));
+        return ResponseEntity.ok(applyService.getMyApplicants(postId, memberId, status));
     }
 
-    @GetMapping("/my")
+    @GetMapping("/my")  // 지원상태에 따른 구인글 조회 - Long memberId는 본인
     public ResponseEntity<List<RecruitCoreResponse>> getMyAppliedPostsInfo(@RequestParam Long memberId, @RequestParam MatchStatus matchStatus) {
         return ResponseEntity.ok(applyService.getMyAppliedPostsByMatchStatus(memberId, matchStatus));
     }
+
 }

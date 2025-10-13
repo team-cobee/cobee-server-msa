@@ -20,6 +20,17 @@ public interface ApplyRepository extends JpaRepository<ApplyRecord, Long> {
     List<ApplyRecord> findMyPostAppliersExceptMe(@Param("postId") Long postId,
                                                  @Param("memberId") Long memberId);
 
-   // @Query("select applies from ApplyRecord applies where applies.matchStatus=:status and applies.appliedMemberId=:memberId")
+    @Query("""
+        select a
+        from ApplyRecord a
+        where a.post.id = :postId
+          and a.appliedMemberId <> :memberId
+                  and a.matchStatus = :status
+        """)
+    List<ApplyRecord> findMyPostAppliersExceptMeWithStatus(@Param("postId") Long postId,
+                                                           @Param("memberId") Long memberId,
+                                                           @Param("status") MatchStatus status);
+
     List<ApplyRecord> findApplyRecordsByAppliedMemberIdAndMatchStatus(@Param("memberId") Long memberId, @Param("status") MatchStatus status);
+
 }
