@@ -13,6 +13,14 @@ spring:
       server:
         webflux:
           routes:
+            - id: member-oauth
+              uri: lb://MEMBER-SERVICE
+              predicates:
+                - Path=/oauth2/**
+            - id: member-login
+              uri: lb://MEMBER-SERVICE
+              predicates:
+                - Path=/login/**
             - id: recruit
               uri: lb://RECRUIT-SERVICE
               predicates: Path=/recruit/**
