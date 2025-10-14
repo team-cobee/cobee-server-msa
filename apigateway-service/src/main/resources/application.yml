@@ -40,3 +40,8 @@ management:
     web:
       exposure:
         include: health,info,gateway
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  access-token-expire-time: 86400000
+  refresh-token-expire-time: 604800000
