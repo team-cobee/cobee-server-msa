@@ -1,8 +1,9 @@
 FROM eclipse-temurin:21-jdk AS build
+ARG MODULE_NAME
 WORKDIR /app
 COPY gradlew gradle.properties settings.gradle build.gradle ./
 COPY gradle ./gradle
-COPY src ./src
+COPY ${MODULE_NAME}/src ./src
 RUN chmod +x ./gradlew
 RUN --mount=type=cache,target=/root/.gradle \
     ./gradlew -q clean bootJar

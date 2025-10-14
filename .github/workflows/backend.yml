@@ -47,11 +47,16 @@ jobs:
             IMAGE_TAG="${{ env.REGISTRY }}/${{ env.REPOSITORY }}/$SERVICE_NAME:latest"
             
             echo "Building $SERVICE_NAME..."
-            
-            docker build -t "$SERVICE_NAME" -f "./$SERVICE_NAME/Dockerfile" .
-            
+          
+            docker build -t "$SERVICE_NAME" \
+              -f "./$SERVICE_NAME/Dockerfile" \
+              --build-arg MODULE_NAME="$SERVICE_NAME" \
+              .
+          
+            # 2. 레지스트리 태그 지정
             docker tag "$SERVICE_NAME" "$IMAGE_TAG"
-            
+          
+            # 3. 이미지 푸시
             docker push "$IMAGE_TAG"
             
             echo "Successfully pushed $SERVICE_NAME to $IMAGE_TAG"
