@@ -38,9 +38,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             OAuthAttributes attributes = OAuthAttributes.of("response", oAuth2User.getAttributes());
 
             // DB에서 회원 정보 조회
-            Member member = memberRepository.findByEmail(attributes.getEmail())
-                    .orElseThrow(() -> new CustomException(BaseErrorCode._INTERNAL_SERVER_ERROR)); // 일단 현재 코드를 사용하고 추후 common 라이브러리 코드 수정
-
+            Member member = memberRepository.findBySocialId(attributes.getSocialId())
+                    .orElseThrow(() -> new CustomException(BaseErrorCode._INTERNAL_SERVER_ERROR));// 일단 현재 코드를 사용하고 추후 common 라이브러리 코드 수정
             String accessToken = jwtProvider.createAccessToken(String.valueOf(member.getId()));
             log.info("발급된 Access Token: {}", accessToken);
 
