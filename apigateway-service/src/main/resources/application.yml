@@ -24,12 +24,23 @@ spring:
             - id: recruit
               uri: lb://RECRUIT-SERVICE
               predicates: Path=/recruit/**
+              filters:
+                - AuthorizationHeaderFilter
             - id: alarm
               uri: lb://ALARM-SERVICE
               predicates: Path=/alarm/**
+              filters:
+                - AuthorizationHeaderFilter
             - id: apply
               uri: lb://RECRUIT-SERVICE
               predicates: Path=/apply/**
+              filters:
+                - AuthorizationHeaderFilter
+            - id: member
+              uri: lb://MEMBER-SERVICE
+              predicates: Path=/members/**
+              filters:
+                - AuthorizationHeaderFilter
 eureka:
   client:
     service-url:
@@ -40,3 +51,8 @@ management:
     web:
       exposure:
         include: health,info,gateway
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  access-token-expire-time: 86400000
+  refresh-token-expire-time: 604800000

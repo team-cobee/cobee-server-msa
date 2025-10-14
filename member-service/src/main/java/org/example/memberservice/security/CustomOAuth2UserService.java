@@ -51,7 +51,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     // DB에 사용자 정보가 없으면 새로 저장, 있으면 업데이트
     private Member saveOrUpdate(OAuthAttributes attributes) {
-        Member member = memberRepository.findByEmail(attributes.getEmail())
+        Member member = memberRepository.findBySocialId(attributes.getSocialId())
                 .map(entity -> entity.update(attributes.getName(), attributes.getProfileUrl())) // 이미 있는 회원이면 이름 업데이트 -> Why? 업데이트 사항이 있을때만 변경하면 되는거 아닌지. 아닐경우에는 그냥 조회만 해주면 되는거 아닌가
                 .orElse(attributes.toEntity());
         return memberRepository.save(member);
