@@ -60,7 +60,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
                     .header("X-USER-ID", memberId)
                     .build();
             // 다음 필터로 요청 넘김
-            return chain.filter(exchange);
+            return chain.filter(exchange.mutate().request(newRequest).build());
         };
     }
 

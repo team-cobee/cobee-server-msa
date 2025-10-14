@@ -36,6 +36,11 @@ spring:
               predicates: Path=/apply/**
               filters:
                 - AuthorizationHeaderFilter
+            - id: member
+              uri: lb://MEMBER-SERVICE
+              predicates: Path=/members/**
+              filters:
+                - AuthorizationHeaderFilter
 eureka:
   client:
     service-url:
