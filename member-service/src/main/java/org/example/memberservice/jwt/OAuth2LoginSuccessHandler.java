@@ -1,5 +1,6 @@
 package org.example.memberservice.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,14 +11,17 @@ import org.example.common.apiPayload.error.exception.CustomException;
 import org.example.memberservice.domain.Member;
 import org.example.memberservice.repository.MemberRepository;
 import org.example.memberservice.security.OAuthAttributes;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
@@ -26,6 +30,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     private final JwtProvider jwtProvider;
     private final MemberRepository memberRepository;
+    private final RedisTemplate<Object, Object> redisTemplate;
+    private final ObjectMapper objectMapper;
 
 
     @Override
@@ -40,21 +46,28 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             // DB에서 회원 정보 조회
             Member member = memberRepository.findBySocialId(attributes.getSocialId())
                     .orElseThrow(() -> new CustomException(BaseErrorCode._INTERNAL_SERVER_ERROR));// 일단 현재 코드를 사용하고 추후 common 라이브러리 코드 수정
-            String accessToken = jwtProvider.createAccessToken(String.valueOf(member.getId()));
+            String memberId = String.valueOf(member.getId());
+            String accessToken = jwtProvider.createAccessToken(memberId);
+            String refreshToken = jwtProvider.createRefreshToken(); // RefreshToken 생성
+
             log.info("발급된 Access Token: {}", accessToken);
+            log.info("발급된 Refresh Token: {}", refreshToken);
 
-            // 백엔드 테스트를 위해, API Gateway의 임의 경로로 토큰을 실어 리다이렉트합니다.
-            String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:8080/login/success")
-                    .queryParam("accessToken", accessToken)
-                    .build()
-                    .encode(StandardCharsets.UTF_8)
-                    .toUriString();
+            redisTemplate.opsForValue().set(
+                    memberId,
+                    refreshToken,
+                    7, // 유효기간
+                    TimeUnit.DAYS // 단위는 일
+            );
 
-            log.info("테스트를 위해 다음 주소로 리다이렉트합니다: {}", targetUrl);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
-            clearAuthenticationAttributes(request);
-            // 리다이렉트 실행
-            getRedirectStrategy().sendRedirect(request, response, targetUrl);
+            HashMap<Object, Object> tokens = new HashMap<>();
+            tokens.put("accessToken", accessToken);
+            tokens.put("refreshToken", refreshToken);
+
+            response.getWriter().println(objectMapper.writeValueAsString(tokens));
         } catch (Exception e) {
             log.error("로그인 성공 후 처리 중 에러 발생", e);
             throw e;
