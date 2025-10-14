@@ -24,12 +24,18 @@ spring:
             - id: recruit
               uri: lb://RECRUIT-SERVICE
               predicates: Path=/recruit/**
+              filters:
+                - AuthorizationHeaderFilter
             - id: alarm
               uri: lb://ALARM-SERVICE
               predicates: Path=/alarm/**
+              filters:
+                - AuthorizationHeaderFilter
             - id: apply
               uri: lb://RECRUIT-SERVICE
               predicates: Path=/apply/**
+              filters:
+                - AuthorizationHeaderFilter
 eureka:
   client:
     service-url:
