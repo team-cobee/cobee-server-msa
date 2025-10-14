@@ -4,22 +4,30 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
-    @Value("${spring.data.redis.url}")
-    private String redisUrl;
+
+    @Value("${spring.data.redis.host}")
+    private String host;
+
+    @Value("${spring.data.redis.port}")
+    private int port;
+
+    @Value("${spring.data.redis.password}")
+    private String password;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        // application.yml에 있는 URL 정보를 파싱하여 Redis 호스트와 포트를 설정
-        String[] urlParts = redisUrl.replace("redis://", "").split(":");
-        String host = urlParts[0];
-        int port = Integer.parseInt(urlParts[1]);
-        return new LettuceConnectionFactory(host, port);
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(host);
+        redisStandaloneConfiguration.setPort(port);
+        redisStandaloneConfiguration.setPassword(password);
+        return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
     @Bean

@@ -30,7 +30,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     private final JwtProvider jwtProvider;
     private final MemberRepository memberRepository;
-    private final RedisTemplate<Object, Object> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
 
