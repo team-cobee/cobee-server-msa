@@ -1,6 +1,7 @@
 package org.example.memberservice.security;
 
 import lombok.RequiredArgsConstructor;
+import org.example.memberservice.jwt.OAuth2LoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -23,7 +25,7 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)) // 로그인 성공 시 사용자 정보를 받아와 회원가입 또는 회원정보 업데이트
-                        .successHandler(/* 여기에 로그인 성공 후 JWT를 만들어줄 핸들러가 들어갈 거예요 */)
+                        .successHandler(oAuth2LoginSuccessHandler)
                 );
         return http.build();
     }

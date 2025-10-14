@@ -44,9 +44,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         //    (우리는 세션을 사용하지 않지만, 인증 절차상 이 객체를 반환해야 함)
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
-                attributes.getAttributes(),
-                attributes.getNameAttributeKey()
-
+                oAuth2User.getAttributes(),
+                userNameAttributeName
         );
     }
 
