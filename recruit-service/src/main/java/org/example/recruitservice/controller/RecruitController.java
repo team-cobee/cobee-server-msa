@@ -54,7 +54,7 @@ public class RecruitController {
     }
 
 
-    @DeleteMapping("/{memberId}")
+    @DeleteMapping("/by-member/{memberId}")
     public ResponseEntity<Void> deleteAllRecruitDataByMemberId(@PathVariable("memberId") Long memberId){
         recruitService.deleteAllRecruitData(memberId);
         applyService.deleteAllApplyData(memberId);

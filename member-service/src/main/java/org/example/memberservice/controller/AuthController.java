@@ -32,4 +32,12 @@ public class AuthController {
         MemberInfoDto memberInfoDto = authService.logout(memberId);
         return ApiResponse.success("로그아웃 성공", "200", memberInfoDto);
     }
+
+    @PostMapping("/withdraw")
+    public ApiResponse<MemberInfoDto> withdraw(
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId
+    ) {
+        MemberInfoDto withdraw = authService.withdraw(memberId);
+        return ApiResponse.success("회원 탈퇴 성공", "200", withdraw);
+    }
 }
