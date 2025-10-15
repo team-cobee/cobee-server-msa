@@ -80,4 +80,10 @@ public class RecruitService {
             return "구인글 삭제 불가능";
         }
     }
+
+    public void deleteAllRecruitData(Long memberId) {
+        // 해당 멤버가 작성한 모든 구인글을 찾아서 삭제
+        List<RecruitPost> posts = recruitRepository.findAllByOwnerId(memberId);
+        recruitRepository.deleteAll(posts);
+    }
 }
