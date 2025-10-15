@@ -45,6 +45,9 @@ dependencies {
     //lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // mac 전용 Netty DNS 해석 라이브러리
+    runtimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.115.Final:osx-aarch_64'
 }
 
 tasks.named('test') {
