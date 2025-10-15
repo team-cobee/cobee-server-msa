@@ -40,6 +40,12 @@ public class Member extends BaseEntity {
     @Column
     private Boolean ocrValidation;
 
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private PublicProfile publicProfile;
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private MemberPreference memberPreference;
+
     @Builder
     public Member(String name, String email, String birthDate, String gender, String socialId, String profileUrl,Boolean isCompleted, Boolean ocrValidation) {
         this.name = name;
