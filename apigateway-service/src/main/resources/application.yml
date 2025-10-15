@@ -21,6 +21,10 @@ spring:
               uri: lb://MEMBER-SERVICE
               predicates:
                 - Path=/login/**
+            - id: member-refresh
+              uri: lb://MEMBER-SERVICE
+              predicates:
+                - Path=/auth/refresh
             - id: recruit
               uri: lb://RECRUIT-SERVICE
               predicates: Path=/recruit/**
@@ -56,3 +60,8 @@ jwt:
   secret: ${JWT_SECRET_KEY}
   access-token-expire-time: 86400000
   refresh-token-expire-time: 604800000
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.web: DEBUG
