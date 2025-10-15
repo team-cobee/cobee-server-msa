@@ -48,7 +48,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                     .orElseThrow(() -> new CustomException(BaseErrorCode._INTERNAL_SERVER_ERROR));// 일단 현재 코드를 사용하고 추후 common 라이브러리 코드 수정
             String memberId = String.valueOf(member.getId());
             String accessToken = jwtProvider.createAccessToken(memberId);
-            String refreshToken = jwtProvider.createRefreshToken(); // RefreshToken 생성
+            String refreshToken = jwtProvider.createRefreshToken(memberId); // RefreshToken 생성
 
             log.info("발급된 Access Token: {}", accessToken);
             log.info("발급된 Refresh Token: {}", refreshToken);

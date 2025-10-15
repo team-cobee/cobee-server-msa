@@ -1,5 +1,7 @@
 package org.example.memberservice.jwt;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -42,13 +44,51 @@ public class JwtProvider {
     }
 
     // RefreshToken 생성
-    public String createRefreshToken() {
+    public String createRefreshToken(String memberId) {
         long now = (new Date()).getTime();
         Date validity = new Date(now + this.refreshTokenValiditySeconds);
 
         return Jwts.builder()
+                .setSubject(memberId)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .setExpiration(validity)
                 .compact();
+    }
+
+    // RefreshToken에서 memberId를 추출하는 헬퍼 메서드
+    public String getMemberIdFromToken(String token) {
+        try {
+            Claims claims = getClaims(token);
+            return claims.getSubject();
+        } catch (Exception e) {
+            throw new RuntimeException("토큰에서 사용자 정보를 추출할 수 없습니다.");
+        }
+    }
+
+    private Claims getClaims(String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            throw new RuntimeException("RefreshToken이 만료되었습니다.");
+        } catch (Exception e) {
+            throw new RuntimeException("유효하지 않은 토큰입니다.");
+        }
+
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
