@@ -2,8 +2,11 @@ package org.example.memberservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.memberservice.domain.Member;
+import org.example.memberservice.dto.MemberInfoDto;
 import org.example.memberservice.dto.TokenRefreshResponse;
 import org.example.memberservice.jwt.JwtProvider;
+import org.example.memberservice.repository.MemberRepository;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class AuthService {
     private final JwtProvider jwtProvider;
     private final RedisTemplate<String, String> redisTemplate;
+    private final MemberRepository memberRepository;
 
     /**
      * RefreshToken을 받아서 새로운 AccessToken과 RefreshToken을 발급
@@ -55,5 +59,11 @@ public class AuthService {
                 newRefreshToken,
                 jwtProvider.refreshTokenValiditySeconds
         );
+    }
+
+    public MemberInfoDto getMemberInfo(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("해당 멤버를 찾을 수 없습니다."));
+        return MemberInfoDto.from(member);
     }
 }

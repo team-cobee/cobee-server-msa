@@ -2,13 +2,12 @@ package org.example.memberservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.common.apiPayload.response.ApiResponse;
+import org.example.common.constant.GatewayConstant;
+import org.example.memberservice.dto.MemberInfoDto;
 import org.example.memberservice.dto.TokenRefreshRequest;
 import org.example.memberservice.dto.TokenRefreshResponse;
 import org.example.memberservice.service.AuthService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,6 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
 
+    @GetMapping
+    public ApiResponse<?> getMemberInfo(@RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId) {
+        MemberInfoDto memberInfo = authService.getMemberInfo(memberId);
+        return ApiResponse.success("사용자 정보 조회 성공", "200", memberInfo);
+    }
     @PostMapping("/refresh")
     public ApiResponse<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request) {
         TokenRefreshResponse tokenRefreshResponse = authService.refreshTokens(request.getRefreshToken());
