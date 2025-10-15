@@ -25,4 +25,11 @@ public class AuthController {
         TokenRefreshResponse tokenRefreshResponse = authService.refreshTokens(request.getRefreshToken());
         return ApiResponse.success("토큰 재발급 성공", "TOKEN_REFRESH_SUCCESS", tokenRefreshResponse);
     }
+
+    @PostMapping("/logout")
+    public ApiResponse<MemberInfoDto> logout (
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId) {
+        MemberInfoDto memberInfoDto = authService.logout(memberId);
+        return ApiResponse.success("로그아웃 성공", "200", memberInfoDto);
+    }
 }

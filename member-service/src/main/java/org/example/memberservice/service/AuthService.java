@@ -1,9 +1,11 @@
 package org.example.memberservice.service;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.memberservice.domain.Member;
 import org.example.memberservice.dto.MemberInfoDto;
+import org.example.memberservice.dto.MemberResponseDto;
 import org.example.memberservice.dto.TokenRefreshResponse;
 import org.example.memberservice.jwt.JwtProvider;
 import org.example.memberservice.repository.MemberRepository;
@@ -11,6 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -65,5 +68,16 @@ public class AuthService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("해당 멤버를 찾을 수 없습니다."));
         return MemberInfoDto.from(member);
+    }
+
+    public MemberInfoDto logout(Long memberId) {
+        // Redis에서 RefreshToken 삭제
+        redisTemplate.delete(String.valueOf(memberId));
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+
+        return MemberInfoDto.from(member);
+
     }
 }
