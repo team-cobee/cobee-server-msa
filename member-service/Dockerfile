@@ -8,6 +8,8 @@ COPY gradle ./gradle
 COPY ${MODULE_NAME}/build.gradle ./build.gradle
 
 COPY ${MODULE_NAME}/src ./src
+COPY common/build.gradle ./common/
+COPY common/src ./common/src
 
 RUN chmod +x ./gradlew
 RUN --mount=type=cache,target=/root/.gradle \
