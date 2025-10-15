@@ -6,7 +6,7 @@ COPY gradle ./gradle
 COPY ${MODULE_NAME}/src ./src
 RUN chmod +x ./gradlew
 RUN --mount=type=cache,target=/root/.gradle \
-    ./gradlew -q clean bootJar
+    ./gradlew -q clean bootJar --refresh-dependencies
 
 
 FROM eclipse-temurin:21-jre
