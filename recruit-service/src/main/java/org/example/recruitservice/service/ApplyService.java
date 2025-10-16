@@ -85,4 +85,10 @@ public class ApplyService {
         Optional<ApplyRecord> apply = applyRepository.findApplyRecordsByAppliedMemberIdAndPostId(postId, memberId);
         return apply.isPresent();
     }
+
+    public void deleteAllApplyData(Long memberId) {
+        // 해당 멤버의 모든 지원 기록을 찾아서 삭제
+        List<ApplyRecord> records = applyRepository.findApplyRecordsByAppliedMemberId(memberId);
+        applyRepository.deleteAll(records);
+    }
 }

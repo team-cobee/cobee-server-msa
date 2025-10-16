@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.recruitservice.dto.RecruitCoreResponse;
 import org.example.recruitservice.dto.RecruitRequest;
 import org.example.recruitservice.dto.RecruitResponse;
+import org.example.recruitservice.service.ApplyService;
 import org.example.recruitservice.service.RecruitService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecruitController {
     private final RecruitService recruitService;
+    private final ApplyService applyService;
 
     @GetMapping("/test")
     public ResponseEntity<String> recruit() {
@@ -51,4 +53,11 @@ public class RecruitController {
         return ResponseEntity.ok(recruitService.deleteRecruitPost(postId));
     }
 
+
+    @DeleteMapping("/by-member/{memberId}")
+    public ResponseEntity<Void> deleteAllRecruitDataByMemberId(@PathVariable("memberId") Long memberId){
+        recruitService.deleteAllRecruitData(memberId);
+        applyService.deleteAllApplyData(memberId);
+        return ResponseEntity.ok().build();
+    }
 }
