@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class OcrService {
     private final MemberRepository memberRepository;
-
+/*
     @Transactional
     public void verifyAndUpdateOcrStatus(Long memberId, OcrValueDto ocrResult){
         Member member = memberRepository.findById(memberId)
@@ -37,7 +37,7 @@ public class OcrService {
         // 성별 처리
 
         return;
-    }
+    }*/
 
     private String parseGender(String ocrResidentNumber) {
 

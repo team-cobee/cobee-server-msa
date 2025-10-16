@@ -19,12 +19,15 @@ public class OcrController {
             @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
             @RequestParam("image") MultipartFile imageFile
     ){
-        boolean isSuccess = ocrService.verifyAndupdateOcrStatus(memberId, imageFile);
+/*
+        boolean isSuccess = ocrService.verifyAndUpdateOcrStatus(memberId, imageFile);
 
         if (isSuccess) {
             return ApiResponse.success("OCR 인증에 성공했습니다.", "200", null);
         } else {
             return ApiResponse.failure("OCR 인증에 실패했습니다.", "400", "정보가 일치하지 않습니다.");
         }
+*/
+        return null;
     }
 }

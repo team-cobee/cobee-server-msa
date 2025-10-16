@@ -34,13 +34,35 @@ public class OAuthAttributes {
         // attributes 맵에서 "response" 키로 감싸진 실제 사용자 정보 맵을 꺼냅니다.
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
 
+        String birthyear = (String) response.get("birthyear");
+        String birthday = (String) response.get("birthday");
+        String birthdate = null;
+
+        if (birthyear != null && birthday != null) {
+            birthdate = birthyear + "-" + birthday;
+        } else if (birthyear != null) {
+            birthdate = birthyear;
+        } else if (birthday != null) {
+            birthdate = birthday;
+        }
+
+        String gender = (String) response.get("gender");
+        String processedGender = null;
+        if (gender != null) {
+            if (gender.equalsIgnoreCase("F")) {
+                processedGender = "FEMALE";
+            } else if (gender.equalsIgnoreCase("M")) {
+                processedGender = "MALE";
+            }
+        }
+
         return OAuthAttributes.builder()
                 .name((String) response.get("name"))
                 .email((String) response.get("email"))
                 .socialId((String) response.get("id")) // 네이버 고유 id
                 .profileUrl((String) response.get("profile_image"))
-                .gender((String) response.get("gender"))
-                .birthDate((String) response.get("birthday")) // 네이버 응답 필드명은 birthday
+                .gender(processedGender)
+                .birthDate(birthdate) // 네이버 응답 필드명은 birthday
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
