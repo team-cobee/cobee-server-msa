@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eureka-deployment
+  labels:
+    app: eureka-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eureka-server
+  template:
+    metadata:
+      labels:
+        app: eureka-server
+    spec:
+      containers:
+        - name: eureka-server
+          image: 65553a5d-kr1-registry.container.nhncloud.com/cobee-server/eureka-server:latest
+          ports:
+            - containerPort: 8761
+          env:
+            - name: EUREKA_CLIENT_REGISTERWITH_EUREKA
+              value: "false"
+            - name: EUREKA_CLIENT_FETCH_REGISTRY
+              value: "false"
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
