@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deploy
+  name: recruit-deployment
   labels:
     app: recruit-service
 spec:
