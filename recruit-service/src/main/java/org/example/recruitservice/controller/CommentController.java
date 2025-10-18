@@ -16,5 +16,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("")
-    public ApiResponse<Comment> addComment(@RequestBody Comment comment) {}
+    public ApiResponse<Comment> addComment(@RequestBody Comment comment) {
+        return null;
+    }
 }
