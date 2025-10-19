@@ -2,7 +2,9 @@ package org.example.recruitservice.dto.converter;
 
 import lombok.Builder;
 import org.example.recruitservice.domain.ApplyRecord;
+import org.example.recruitservice.domain.Enum.Gender;
 import org.example.recruitservice.domain.RecruitPost;
+import org.example.recruitservice.dto.MemberCoreResponse;
 import org.example.recruitservice.dto.RecruitCoreResponse;
 import org.example.recruitservice.dto.RecruitResponse;
 
@@ -10,8 +12,11 @@ import java.util.List;
 
 @Builder
 public class RecruitConverter {
+    public static RecruitResponse from(RecruitPost recruitPost) {
+        return baseResponse(recruitPost, null);
+    }
 
-    public static RecruitResponse baseResponse(RecruitPost post) {
+    public static RecruitResponse baseResponse(RecruitPost post, MemberCoreResponse member) {
 
         return RecruitResponse.builder()
                 .postId(post.getId())
@@ -21,10 +26,10 @@ public class RecruitConverter {
                 .bookmarked(0)
                 .status(post.getStatus())
 
-//                .authorId(post.getMember().getId())
-//                .authorName(post.getMember().getName())
-//                .authorGender(Gender.valueOf(post.getMember().getGender()))
-//                .birthdate(post.getMember().getBirthDate())
+                .authorId(post.getOwnerId())
+                .authorName(post.getOwnerName())
+                .authorGender(post.getOwnerGender())
+                //.birthdate(post.getMember().getBirthDate())
 
                 .recruitCount(post.getRecruitCount())
                 .hasRoom(post.getHasRoom())

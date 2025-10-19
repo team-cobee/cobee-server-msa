@@ -26,7 +26,16 @@ public class RecruitPost {
     private Long id;
 
     @Column
-    private Long ownerId;  // memberId 넣기
+    private Long ownerId;
+
+    @Column
+    private Gender ownerGender;
+
+    @Column
+    private String ownerName;
+
+    @Column
+    private String ownerEmail;
 
     @Column
     private String title;

@@ -1,6 +1,7 @@
 package org.example.recruitservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.common.constant.GatewayConstant;
 import org.example.recruitservice.dto.RecruitCoreResponse;
 import org.example.recruitservice.dto.RecruitRequest;
 import org.example.recruitservice.dto.RecruitResponse;
@@ -24,8 +25,9 @@ public class RecruitController {
     }
 
     @PostMapping("")
-    public ResponseEntity<RecruitResponse> createRecruit(@RequestBody RecruitRequest recruitRequest) {
-        return ResponseEntity.ok(recruitService.createRecruitPost(recruitRequest));
+    public ResponseEntity<RecruitResponse> createRecruit(@RequestBody RecruitRequest recruitRequest,
+                                                         @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId) {
+        return ResponseEntity.ok(recruitService.createRecruitPost(recruitRequest, memberId));
     }
 
     @PatchMapping("/{postId}")
