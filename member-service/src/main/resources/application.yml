@@ -65,6 +65,12 @@ jwt:
   access-token-expire-time: 86400000
   refresh-token-expire-time: 604800000
 
+nhn:
+  ocr:
+    url: ${OCR_URL}
+    app-key: ${OCR_APP_KEY}
+    secret-key: ${OCR_SECRET_KEY}
+
 app:
   backend:
     url: ${BACKEND_URL:http://localhost:8080}
