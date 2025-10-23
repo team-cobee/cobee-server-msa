@@ -62,4 +62,14 @@ public class Member extends BaseEntity {
         this.profileUrl = profileUrl;
         return this;
     }
+    public void updateGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void updateBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+    public void updateOcrValidation(boolean ocrValidation) {
+        this.ocrValidation = ocrValidation;
+    }
 }

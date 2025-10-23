@@ -46,9 +46,15 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
+    // ocr
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
     //lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // Bouncy Castle Provider 추가
+    implementation 'org.bouncycastle:bcprov-jdk18on'
 
     // 공통 라이브러리 사용
     implementation project(':common')

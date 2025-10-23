@@ -31,6 +31,13 @@ spring:
                 - Path=/auth/**
               filters:
                 - AuthorizationHeaderFilter
+            - id: member-ocr
+              uri: lb://MEMBER-SERVICE
+              predicates:
+                - Path=/ocr/**
+                - Method=POST
+              filters:
+                - AuthorizationHeaderFilter
             - id: recruit
               uri: lb://RECRUIT-SERVICE
               predicates: Path=/recruit/**
