@@ -9,7 +9,7 @@ import org.example.recruitservice.domain.Enum.Gender;
 import org.example.recruitservice.domain.Enum.LifeStyle;
 import org.example.recruitservice.domain.Enum.Personality;
 import org.example.recruitservice.domain.Enum.RecruitStatus;
-import org.example.recruitservice.dto.RecruitRequest;
+import org.example.recruitservice.dto.recruit.RecruitRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,16 @@ public class RecruitPost {
     private Long id;
 
     @Column
-    private Long ownerId;  // memberId 넣기
+    private Long ownerId;
+
+    @Column
+    private Gender ownerGender;
+
+    @Column
+    private String ownerName;
+
+    @Column
+    private String ownerEmail;
 
     @Column
     private String title;
@@ -98,6 +107,9 @@ public class RecruitPost {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<ApplyRecord> applyRecords = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
     public void updatePost(RecruitRequest dto) {
         if (dto.getTitle() != null) {
             this.title = dto.getTitle();
@@ -155,17 +167,8 @@ public class RecruitPost {
         }
     }
 
-//    아래 속성은 추후 조정
-//    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-//    private List<Comment> comments;
-//
-
-//
-//    @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Images> images = new ArrayList<>();
-//
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private Member member;
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
 
 }

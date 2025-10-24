@@ -1,17 +1,25 @@
 package org.example.recruitservice.dto.converter;
 
 import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import org.example.recruitservice.client.MemberClient;
 import org.example.recruitservice.domain.ApplyRecord;
 import org.example.recruitservice.domain.RecruitPost;
-import org.example.recruitservice.dto.RecruitCoreResponse;
-import org.example.recruitservice.dto.RecruitResponse;
-
-import java.util.List;
+import org.example.recruitservice.dto.MemberCoreResponse;
+import org.example.recruitservice.dto.recruit.RecruitCoreResponse;
+import org.example.recruitservice.dto.recruit.RecruitResponse;
 
 @Builder
+@RequiredArgsConstructor
 public class RecruitConverter {
+    public final MemberClient memberClient;
 
-    public static RecruitResponse baseResponse(RecruitPost post) {
+
+    public static RecruitResponse from(RecruitPost recruitPost) {
+        return baseResponse(recruitPost, null);
+    }
+
+    public static RecruitResponse baseResponse(RecruitPost post, MemberCoreResponse member) {
 
         return RecruitResponse.builder()
                 .postId(post.getId())
@@ -21,10 +29,10 @@ public class RecruitConverter {
                 .bookmarked(0)
                 .status(post.getStatus())
 
-//                .authorId(post.getMember().getId())
-//                .authorName(post.getMember().getName())
-//                .authorGender(Gender.valueOf(post.getMember().getGender()))
-//                .birthdate(post.getMember().getBirthDate())
+                .authorId(post.getOwnerId())
+                .authorName(post.getOwnerName())
+                .authorGender(post.getOwnerGender())
+                //.birthdate(post.getMember().getBirthDate())
 
                 .recruitCount(post.getRecruitCount())
                 .hasRoom(post.getHasRoom())
@@ -45,18 +53,6 @@ public class RecruitConverter {
                 .longitude(post.getRegionLongitude())
                 .detailInfo(post.getDetailDescription())
                 .additionalInfo(post.getAdditionalDescription())
-
-//                .comments(responses)
-//                .applicantCount(Optional.ofNullable(post.getApplyRecords())
-//                        .map(records -> records.size() - 1)
-//                        .orElse(0))
-//                .imgUrl(Optional.ofNullable(post.getImages())
-//                        .map(images -> images.stream()
-//
-//                                .sorted(Comparator.comparing(Images::getDisplayOrder))
-//                                .map(Images::getImageUrl)
-//                                .collect(Collectors.toList()))
-//                        .orElse(new ArrayList<>()))
                 .build();
     }
 

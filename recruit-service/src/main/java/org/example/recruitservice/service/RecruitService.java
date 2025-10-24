@@ -2,26 +2,47 @@ package org.example.recruitservice.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.recruitservice.dto.RecruitCoreResponse;
+import org.example.common.apiPayload.response.ApiResponse;
+import org.example.recruitservice.client.MemberClient;
+import org.example.recruitservice.dto.MemberCoreResponse;
+import org.example.recruitservice.dto.recruit.RecruitCoreResponse;
 import org.example.recruitservice.repository.RecruitRepository;
 import org.example.recruitservice.domain.Enum.RecruitStatus;
 import org.example.recruitservice.domain.RecruitPost;
-import org.example.recruitservice.dto.RecruitRequest;
-import org.example.recruitservice.dto.RecruitResponse;
+import org.example.recruitservice.dto.recruit.RecruitRequest;
+import org.example.recruitservice.dto.recruit.RecruitResponse;
 import org.example.recruitservice.dto.converter.RecruitConverter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class RecruitService {
     private final RecruitRepository recruitRepository;
+    private final MemberClient memberClient;
 
-    public RecruitResponse createRecruitPost(RecruitRequest recruitPost/*, Long memberId */) {
+    public RecruitResponse createRecruitPost(RecruitRequest recruitPost, Long memberId) {
+        ApiResponse<MemberCoreResponse> memberInfoResponse = memberClient.getMyInfo(memberId);
+
+        MemberCoreResponse memberInfo;
+        if (memberInfoResponse != null && memberInfoResponse.isSuccess() && memberInfoResponse.getData() != null) {
+            memberInfo = memberInfoResponse.getData();
+        } else {
+            memberInfo = MemberCoreResponse.builder()
+                    .email(memberInfoResponse.getData().getEmail())
+                    .name(memberInfoResponse.getData().getName())
+                    .id(memberInfoResponse.getData().getId())
+                    .build();
+        }
+        Long ownerId = memberInfo.getId();
+
         RecruitPost recruit = RecruitPost.builder()
-                //.ownerId(memberId)
+                .ownerId(ownerId)
+                .ownerName(Objects.requireNonNull(memberInfoResponse).getData().getName())
+                .ownerEmail(memberInfoResponse.getData().getEmail())
                 .title(recruitPost.getTitle())
                 .recruitCount(recruitPost.getRecruitCount())
                 .rentCostMin(recruitPost.getRentCostMin())
@@ -45,7 +66,7 @@ public class RecruitService {
 
         // 위도 경도 저장 - location api에서 가져와서 저장하기
         recruitRepository.save(recruit);
-        return RecruitConverter.baseResponse(recruit);
+        return RecruitConverter.from(recruit);
 
     }
 
@@ -53,12 +74,12 @@ public class RecruitService {
         RecruitPost post = recruitRepository.findById(postId).orElseThrow();  // 에러 처리도 해야하는데...
         post.updatePost(recruitRequest);
         recruitRepository.save(post);
-        return RecruitConverter.baseResponse(post);
+        return RecruitConverter.from(post);
     }
 
     public RecruitResponse getOneRecruitInfo(Long postId) {
         RecruitPost post = recruitRepository.findById(postId).orElseThrow();
-        return RecruitConverter.baseResponse(post);
+        return RecruitConverter.from(post);
     }
 
     public List<RecruitCoreResponse> getAllRecruitInfo() {
