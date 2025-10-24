@@ -9,7 +9,7 @@ import org.example.recruitservice.domain.Enum.Gender;
 import org.example.recruitservice.domain.Enum.LifeStyle;
 import org.example.recruitservice.domain.Enum.Personality;
 import org.example.recruitservice.domain.Enum.RecruitStatus;
-import org.example.recruitservice.dto.RecruitRequest;
+import org.example.recruitservice.dto.recruit.RecruitRequest;
 
 import java.util.ArrayList;
 import java.util.List;

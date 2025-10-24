@@ -2,13 +2,10 @@ package org.example.recruitservice.dto.converter;
 
 import lombok.Builder;
 import org.example.recruitservice.domain.ApplyRecord;
-import org.example.recruitservice.domain.Enum.Gender;
 import org.example.recruitservice.domain.RecruitPost;
 import org.example.recruitservice.dto.MemberCoreResponse;
-import org.example.recruitservice.dto.RecruitCoreResponse;
-import org.example.recruitservice.dto.RecruitResponse;
-
-import java.util.List;
+import org.example.recruitservice.dto.recruit.RecruitCoreResponse;
+import org.example.recruitservice.dto.recruit.RecruitResponse;
 
 @Builder
 public class RecruitConverter {

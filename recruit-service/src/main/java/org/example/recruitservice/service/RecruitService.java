@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.example.common.apiPayload.response.ApiResponse;
 import org.example.recruitservice.client.MemberClient;
 import org.example.recruitservice.dto.MemberCoreResponse;
-import org.example.recruitservice.dto.RecruitCoreResponse;
+import org.example.recruitservice.dto.recruit.RecruitCoreResponse;
 import org.example.recruitservice.repository.RecruitRepository;
 import org.example.recruitservice.domain.Enum.RecruitStatus;
 import org.example.recruitservice.domain.RecruitPost;
-import org.example.recruitservice.dto.RecruitRequest;
-import org.example.recruitservice.dto.RecruitResponse;
+import org.example.recruitservice.dto.recruit.RecruitRequest;
+import org.example.recruitservice.dto.recruit.RecruitResponse;
 import org.example.recruitservice.dto.converter.RecruitConverter;
 import org.springframework.stereotype.Service;
 

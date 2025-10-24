@@ -3,12 +3,11 @@ package org.example.recruitservice.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.common.apiPayload.response.ApiResponse;
 import org.example.recruitservice.domain.Enum.MatchStatus;
-import org.example.recruitservice.dto.ApplicantResponse;
-import org.example.recruitservice.dto.ApplyResponse;
-import org.example.recruitservice.dto.RecruitCoreResponse;
-import org.example.recruitservice.dto.ApplyAcceptRequest;
+import org.example.recruitservice.dto.apply.ApplicantResponse;
+import org.example.recruitservice.dto.apply.ApplyResponse;
+import org.example.recruitservice.dto.recruit.RecruitCoreResponse;
+import org.example.recruitservice.dto.apply.ApplyAcceptRequest;
 import org.example.recruitservice.service.ApplyService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
