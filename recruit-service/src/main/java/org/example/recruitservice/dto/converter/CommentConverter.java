@@ -9,11 +9,13 @@ import org.example.recruitservice.dto.comment.CommentResponse;
 public class CommentConverter {
 
     public static CommentResponse toCommentResponse(Comment comment, MemberCoreResponse member) {
+        Long parentId = comment.getParent() != null ? comment.getParent().getId() : null;
         return CommentResponse.builder()
                 .commentId(comment.getId())
                 .content(comment.getContent())
                 .isPrivate(comment.getIsPrivate())
-                .postId(comment.getPost().getId())
+                .parentId(comment.getParent().getId())
+                .postId(parentId)
                 .username(member.getName())
                 .profileImage(member.getProfileUrl())
                 .build();
