@@ -1,6 +1,7 @@
 package org.example.recruitservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.common.apiPayload.response.ApiResponse;
 import org.example.recruitservice.domain.Enum.MatchStatus;
 import org.example.recruitservice.dto.ApplicantResponse;
 import org.example.recruitservice.dto.ApplyResponse;
@@ -20,34 +21,34 @@ public class ApplyController {
 
     // TODO : MemberDTO 받으면 로그인 멤버 정보 추가하기
     @PostMapping("/{postId}/{applier}")
-    public ResponseEntity<ApplyResponse> apply(@PathVariable Long applier, @PathVariable Long postId) {
-        return ResponseEntity.ok(applyService.applyForRecruit(applier, postId));
+    public ApiResponse<ApplyResponse> apply(@PathVariable Long applier, @PathVariable Long postId) {
+        return ApiResponse.success("해당 구인글에 지원이 완료되었습니다.", "APPLY-001",applyService.applyForRecruit(applier, postId));
     }
 
     @PostMapping("/accept")
-    public ResponseEntity<ApplyResponse> accept(@RequestBody ApplyAcceptRequest applyRecord) {
-        return ResponseEntity.ok(applyService.acceptOrReject(applyRecord));
+    public ApiResponse<ApplyResponse> accept(@RequestBody ApplyAcceptRequest applyRecord) {
+        return ApiResponse.success("지원 수락 여부 결정완료", "APPLY-002", applyService.acceptOrReject(applyRecord));
     }
 
     // 특정 구인글에서의 지원자 조회(내가 수락할 지원자 정보) + 상태에 따른 조회
     @GetMapping("/applier/{postId}/{memberId}")
-    public ResponseEntity<List<ApplicantResponse>> getMyAppliers(
+    public ApiResponse<List<ApplicantResponse>> getMyAppliers(
             @PathVariable Long postId, @PathVariable Long memberId,
             @RequestParam(name = "status", required = false) MatchStatus status) {
         // 이때 memberId는 로그인한 사용자 본인
-        return ResponseEntity.ok(applyService.getMyApplicants(postId, memberId, status));
+        return ApiResponse.success("구인글 지원자 목록 조회 완료", "APPLY-003", applyService.getMyApplicants(postId, memberId, status));
     }
 
     @GetMapping("/my")  // 나의 매칭 상태에 따른 지원 구인글 조회 - Long memberId는 본인
-    public ResponseEntity<List<RecruitCoreResponse>> getMyAppliedPostsInfo(@RequestParam Long memberId,
+    public ApiResponse<List<RecruitCoreResponse>> getMyAppliedPostsInfo(@RequestParam Long memberId,
                                                                            @RequestParam(name = "status", required = false) MatchStatus status) {
-        return ResponseEntity.ok(applyService.getMyAppliedPostsByMatchStatus(memberId, status));
+        return ApiResponse.success("나의 지원 구인글 상태별 조회 완료", "APPLY-004", applyService.getMyAppliedPostsByMatchStatus(memberId, status));
     }
 
     @GetMapping("/isApplied/{postId}") // 내가 해당 구인글에 지원했는지 여부
-    public ResponseEntity<Boolean> checkIfApplied(@RequestParam Long memberId,
+    public ApiResponse<Boolean> checkIfApplied(@RequestParam Long memberId,
                                                   @PathVariable(name="postId") Long postId){
-            return ResponseEntity.ok(applyService.checkIfIAppliedThisPost(postId, memberId));
+            return ApiResponse.success("내가 지원했는지 여부 조회 완료", "APPLY-005", applyService.checkIfIAppliedThisPost(postId, memberId));
     }
 
 }
