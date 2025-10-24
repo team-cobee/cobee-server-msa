@@ -14,8 +14,8 @@ public class CommentConverter {
                 .commentId(comment.getId())
                 .content(comment.getContent())
                 .isPrivate(comment.getIsPrivate())
-                .parentId(comment.getParent().getId())
-                .postId(parentId)
+                .parentId(parentId)
+                .postId(comment.getPost().getId())
                 .username(member.getName())
                 .profileImage(member.getProfileUrl())
                 .build();
