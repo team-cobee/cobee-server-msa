@@ -14,6 +14,9 @@ import org.example.recruitservice.repository.CommentRepository;
 import org.example.recruitservice.repository.RecruitRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -44,7 +47,14 @@ public class CommentService {
 
         commentRepository.save(comment);
         return CommentConverter.toCommentResponse(comment, member);
+    }
 
-
+    public List<CommentResponse> getAllCommentsInfo(Long postId) {
+        List<Comment> comments = commentRepository.findCommentsByPost_Id(postId);
+        List<CommentResponse> commentResponses = new ArrayList<>();
+        for (Comment comment : comments) {
+            commentResponses.add(CommentConverter.toCommentResponse(comment, memberClient.getMyInfo(comment.getCommentAuthorId()).getData()));
+        }
+        return commentResponses;
     }
 }

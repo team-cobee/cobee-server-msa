@@ -5,6 +5,8 @@ import org.example.recruitservice.domain.Enum.Gender;
 import org.example.recruitservice.domain.Enum.LifeStyle;
 import org.example.recruitservice.domain.Enum.Personality;
 import org.example.recruitservice.domain.Enum.RecruitStatus;
+import org.example.recruitservice.dto.comment.CommentResponse;
+
 import java.util.List;
 
 @Getter
@@ -53,9 +55,6 @@ public class RecruitResponse{
 
     /* 나중에 추가해야하는 것
      * private String firstImage;
-     * private String authorProfileImg;
-     private List<CommentResponse> comments;
-     */
-
+     * private String authorProfileImg; */
     private List<String> imgUrl;
 }
