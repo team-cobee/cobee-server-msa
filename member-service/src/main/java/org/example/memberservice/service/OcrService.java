@@ -30,7 +30,7 @@ public class OcrService {
     @Value("${nhn.ocr.url}")
     private String apiUrl;
 
-    @Value("${nhn.ocr.appkey}")
+    @Value("${OCR_APPKEY}")
     private String appkey;
 
     @Value("${nhn.ocr.secret-key}")

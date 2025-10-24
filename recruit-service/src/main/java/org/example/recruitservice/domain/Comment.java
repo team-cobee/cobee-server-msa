@@ -40,4 +40,9 @@ public class Comment {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> children = new ArrayList<>(); // 대댓글
 
+    public void addChild(Comment child) {
+        children.add(child);
+        child.parent = this;
+    }
+
 }

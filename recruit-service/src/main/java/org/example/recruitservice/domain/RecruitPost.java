@@ -107,6 +107,9 @@ public class RecruitPost {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<ApplyRecord> applyRecords = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
     public void updatePost(RecruitRequest dto) {
         if (dto.getTitle() != null) {
             this.title = dto.getTitle();
@@ -164,17 +167,8 @@ public class RecruitPost {
         }
     }
 
-//    아래 속성은 추후 조정
-//    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-//    private List<Comment> comments;
-//
-
-//
-//    @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Images> images = new ArrayList<>();
-//
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private Member member;
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
 
 }

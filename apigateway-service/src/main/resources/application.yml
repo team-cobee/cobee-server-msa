@@ -59,8 +59,10 @@ spring:
               filters:
                 - AuthorizationHeaderFilter
             - id: comment
-              uri: lb://COMMENT-SERVICE
+              uri: lb://RECRUIT-SERVICE
               predicates: Path=/comments/**
+              filters:
+                - AuthorizationHeaderFilter
 eureka:
   client:
     service-url:
