@@ -1,6 +1,7 @@
 package org.example.recruitservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.common.apiPayload.response.ApiResponse;
 import org.example.common.constant.GatewayConstant;
 import org.example.recruitservice.dto.RecruitCoreResponse;
 import org.example.recruitservice.dto.RecruitRequest;
@@ -19,40 +20,35 @@ public class RecruitController {
     private final RecruitService recruitService;
     private final ApplyService applyService;
 
-    @GetMapping("/test")
-    public ResponseEntity<String> recruit() {
-        return ResponseEntity.ok("Hello World This is Recruit");
-    }
-
     @PostMapping("")
-    public ResponseEntity<RecruitResponse> createRecruit(@RequestBody RecruitRequest recruitRequest,
-                                                         @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId) {
-        return ResponseEntity.ok(recruitService.createRecruitPost(recruitRequest, memberId));
+    public ApiResponse<RecruitResponse> createRecruit(@RequestBody RecruitRequest recruitRequest,
+                                                      @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId) {
+        return ApiResponse.success("구인글 생성 완료", "RECRUIT-001", recruitService.createRecruitPost(recruitRequest, memberId));
     }
 
     @PatchMapping("/{postId}")
-    public ResponseEntity<RecruitResponse> updateRecruit(@PathVariable("postId") Long postId, @RequestBody RecruitRequest recruitRequest) {
-        return ResponseEntity.ok(recruitService.updateRecruit(postId,recruitRequest));
+    public ApiResponse<RecruitResponse> updateRecruit(@PathVariable("postId") Long postId, @RequestBody RecruitRequest recruitRequest) {
+        return ApiResponse.success("구인글 수정 완료", "RECRUIT-002", recruitService.updateRecruit(postId,recruitRequest));
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<RecruitResponse> getRecruitInfo(@PathVariable("postId") Long postId) {
-        return ResponseEntity.ok(recruitService.getOneRecruitInfo(postId));
+    public ApiResponse<RecruitResponse> getRecruitInfo(@PathVariable("postId") Long postId) {
+        return ApiResponse.success("구인글 조회 완료", "RECRUIT-003", recruitService.getOneRecruitInfo(postId));
     }
 
     @GetMapping("")
-    public ResponseEntity<List<RecruitCoreResponse>> getAllRecruitsInfo() {
-        return ResponseEntity.ok(recruitService.getAllRecruitInfo());
+    public ApiResponse<List<RecruitCoreResponse>> getAllRecruitsInfo() {
+        return ApiResponse.success("모든 구인글 조회 완료", "RECRUIT-004",recruitService.getAllRecruitInfo());
     }
 
     @GetMapping("/my")
-    public ResponseEntity<List<RecruitCoreResponse>> getMyRecruitPostsInfo(@RequestParam Long userId) {
-        return ResponseEntity.ok(recruitService.getMyAllRecruitInfo(userId));
+    public ApiResponse<List<RecruitCoreResponse>> getMyRecruitPostsInfo(@RequestParam Long userId) {
+        return ApiResponse.success("나의 구인글 모두 조회 완료", "RECRUIT-005",recruitService.getMyAllRecruitInfo(userId));
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<String> deleteRecruit(@PathVariable("postId") Long postId) {
-        return ResponseEntity.ok(recruitService.deleteRecruitPost(postId));
+    public ApiResponse<String> deleteRecruit(@PathVariable("postId") Long postId) {
+        return ApiResponse.success("구인글 삭제하기 완료", "RECRUIT-006", recruitService.deleteRecruitPost(postId));
     }
 
 
