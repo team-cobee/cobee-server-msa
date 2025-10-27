@@ -1,6 +1,7 @@
 package org.example.memberservice.repository;
 
 import org.example.memberservice.domain.Member;
+import org.example.memberservice.domain.PublicProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,4 +11,5 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByEmail(String email);
     Optional<Member> findBySocialId(String socialId);
+    Optional<Member> findByPublicProfile(PublicProfile publicProfile);
 }

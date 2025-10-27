@@ -31,6 +31,12 @@ spring:
                 - Path=/preferences/**
 #              filters:
 #                - AuthorizationHeaderFilter
+            - id: member-profile
+              uri: lb://MEMBER-SERVICE
+              predicates:
+                - Path=/public-profiles/**
+#              filters:
+#                - AuthorizationHeaderFilter
             - id: member-auth
               uri: lb://MEMBER-SERVICE
               predicates:
