@@ -25,6 +25,12 @@ spring:
               uri: lb://MEMBER-SERVICE
               predicates:
                 - Path=/auth/refresh
+            - id: member-preferences
+              uri: lb://MEMBER-SERVICE
+              predicates:
+                - Path=/preferences/**
+#              filters:
+#                - AuthorizationHeaderFilter
             - id: member-auth
               uri: lb://MEMBER-SERVICE
               predicates:

@@ -43,14 +43,14 @@ public class MemberPreferenceService {
     }
     @Transactional(readOnly = true)
     public MemberPreferencesResponseDto getMemberPreferences(Long memberId) {
-        MemberPreference memberPreference = memberPreferenceRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("Member not found"));
+        MemberPreference memberPreference = memberPreferenceRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new RuntimeException("MemberPreference not found"));
         return MemberPreferencesResponseDto.from(memberPreference);
     }
 
     public MemberPreferencesResponseDto updateMemberPreferences(
             Long memberId, MemberPreferencesRequestDto requestDto) {
-        MemberPreference memberPreference = memberPreferenceRepository.findById(memberId)
+        MemberPreference memberPreference = memberPreferenceRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
         memberPreference.updatePreferences(
                 requestDto.getPreferredGender(),
@@ -69,7 +69,7 @@ public class MemberPreferenceService {
     }
     @Transactional
     public void deleteMemberPreferences(Long memberId) {
-        MemberPreference memberPreference = memberPreferenceRepository.findById(memberId)
+        MemberPreference memberPreference = memberPreferenceRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
         memberPreferenceRepository.delete(memberPreference);
         log.info("사용자 선호도 삭제 완료 - memberId: {}, preferencesId: {}", memberId, memberPreference.getId());
