@@ -46,8 +46,8 @@ spring:
             - id: alarm
               uri: lb://ALARM-SERVICE
               predicates: Path=/alarm/**
-              filters:
-                - AuthorizationHeaderFilter
+#              filters:
+#                - AuthorizationHeaderFilter
             - id: apply
               uri: lb://RECRUIT-SERVICE
               predicates: Path=/apply/**
