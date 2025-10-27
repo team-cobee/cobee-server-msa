@@ -19,6 +19,9 @@ spec:
           image: 65553a5d-kr1-registry.container.nhncloud.com/cobee-server/member-service:latest
           ports:
             - containerPort: 8081
+          envFrom:
+            - secretRef:
+                name: cobee-secret
           # 환경 변수를 통해 Eureka 및 Config Server 설정
           env:
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
