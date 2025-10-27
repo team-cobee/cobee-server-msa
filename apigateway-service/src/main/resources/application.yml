@@ -37,6 +37,11 @@ spring:
                 - Path=/public-profiles/**
 #              filters:
 #                - AuthorizationHeaderFilter
+            - id: bookmark
+              uri: lb://RECRUIT-SERVICE
+              predicates: Path=/bookmark/**
+#              filters:
+#                - AuthorizationHeaderFilter
             - id: member-auth
               uri: lb://MEMBER-SERVICE
               predicates:
