@@ -19,6 +19,9 @@ spec:
           image: 65553a5d-kr1-registry.container.nhncloud.com/cobee-server/eureka-server:latest
           ports:
             - containerPort: 8761
+          envFrom:
+            - secretRef:
+                name: cobee-secret
           env:
             - name: EUREKA_CLIENT_REGISTERWITH_EUREKA
               value: "false"
