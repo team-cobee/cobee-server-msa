@@ -27,17 +27,17 @@ public class PublicProfileService {
             throw new RuntimeException("Public profile already exists");
         }
         PublicProfile publicProfile = new PublicProfile(
-                requestDto.lifeStyle(),
+                requestDto.lifestyle(),
                 requestDto.personality(),
                 requestDto.isSmoking(),
                 requestDto.isSnoring(),
                 requestDto.hasPet(),
-                requestDto.myInfo()
+                requestDto.myInfo(),
+                member
         );
         member.setPublicProfile(publicProfile);
         member.setIsCompleted(true);
         publicProfileRepository.save(publicProfile);
-
     }
     @Transactional(readOnly = true)
     public PublicProfileResponseDto getPublicProfile(Long memberId) {

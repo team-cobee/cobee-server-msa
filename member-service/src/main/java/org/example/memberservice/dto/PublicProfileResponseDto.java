@@ -10,7 +10,7 @@ public record PublicProfileResponseDto(
         String name,
         String gender,
         String profileImageUrl,
-        LifeStyle lifeStyle,
+        LifeStyle lifestyle,
         Personality personality,
         Boolean mSmoking,
         Boolean mSnoring,

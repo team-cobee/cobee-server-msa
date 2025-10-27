@@ -4,7 +4,7 @@ import org.example.memberservice.domain.enums.LifeStyle;
 import org.example.memberservice.domain.enums.Personality;
 
 public record PublicProfileRequestDto(
-        LifeStyle lifeStyle,
+        LifeStyle lifestyle,
         Personality personality,
         Boolean isSmoking,
         Boolean isSnoring,

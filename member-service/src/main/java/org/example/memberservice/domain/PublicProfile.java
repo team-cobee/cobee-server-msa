@@ -39,7 +39,7 @@ public class PublicProfile extends BaseEntity {
     public PublicProfile(
             LifeStyle lifestyle, Personality personality,
             Boolean isSmoking, Boolean isSnoring, Boolean hasPet,
-            String myInfo)
+            String myInfo, Member member)
     {
         this.lifestyle = lifestyle;
         this.personality = personality;
@@ -47,6 +47,7 @@ public class PublicProfile extends BaseEntity {
         this.isSnoring = isSnoring;
         this.hasPet = hasPet;
         this.myInfo = myInfo;
+        this.member = member;
     }
     public void update(
             LifeStyle lifestyle, Personality personality,
@@ -60,6 +61,4 @@ public class PublicProfile extends BaseEntity {
         this.hasPet = hasPet;
         this.myInfo = myInfo;
     }
-
-
 }

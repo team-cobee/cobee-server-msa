@@ -18,7 +18,7 @@ public class PublicProfileController {
 
     private final PublicProfileService publicProfileService;
 
-    @PostMapping("")
+    @PostMapping("/{memberId}")
     public ApiResponse<Void> createPublicProfile(
             //@RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
             @PathVariable Long memberId,
@@ -34,7 +34,7 @@ public class PublicProfileController {
         }
     }
 
-    @GetMapping("")
+    @GetMapping("/{memberId}")
     public ApiResponse<PublicProfileResponseDto> getPublicProfile(
             //@RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId
             @PathVariable Long memberId) {
@@ -42,7 +42,7 @@ public class PublicProfileController {
         return ApiResponse.success("Public profile retrieved successfully", "200", profile);
     }
 
-    @PatchMapping("")
+    @PatchMapping("/{memberId}")
     public ApiResponse<Void> updatePublicProfile(
             //@RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
             @PathVariable Long memberId,
@@ -51,7 +51,7 @@ public class PublicProfileController {
         return ApiResponse.success("Public profile modified successfully", "200");
     }
 
-    @DeleteMapping("")
+    @DeleteMapping("/{memberId}")
     public ApiResponse<Void> deletePublicProfile(
             //@RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
             @PathVariable Long memberId
@@ -60,10 +60,9 @@ public class PublicProfileController {
         return ApiResponse.success("Public profile deleted successfully", "200");
     }
 
-    @GetMapping("/{publicProfileId}")
+    @GetMapping("/p-id/{publicProfileId}")
     public ApiResponse<PublicProfileResponseDto> getPublicProfileById(
             //@RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
-            @PathVariable Long memberId,
             @PathVariable Long publicProfileId
     ) {
         try {
