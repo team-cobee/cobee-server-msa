@@ -35,9 +35,43 @@ public class MemberPreferenceService {
                 .cohabitantCount(requestDto.getCohabitantCount())
                 .preferredAgeMin(requestDto.getPreferredAgeMin())
                 .preferredAgeMax(requestDto.getPreferredAgeMax())
+                .member(member)
                 .build();
         MemberPreference savedPreferences = memberPreferenceRepository.save(memberPreference);
         log.info("사용자 선호도 등록 완료 - memberId: {}, preferencesId: {}", memberId, savedPreferences.getId());
         return MemberPreferencesResponseDto.from(savedPreferences);
+    }
+    @Transactional(readOnly = true)
+    public MemberPreferencesResponseDto getMemberPreferences(Long memberId) {
+        MemberPreference memberPreference = memberPreferenceRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+        return MemberPreferencesResponseDto.from(memberPreference);
+    }
+
+    public MemberPreferencesResponseDto updateMemberPreferences(
+            Long memberId, MemberPreferencesRequestDto requestDto) {
+        MemberPreference memberPreference = memberPreferenceRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+        memberPreference.updatePreferences(
+                requestDto.getPreferredGender(),
+                requestDto.getLifestyle(),
+                requestDto.getPersonality(),
+                requestDto.getSmokingPreference(),
+                requestDto.getSnoringPreference(),
+                requestDto.getPetPreference(),
+                requestDto.getCohabitantCount(),
+                requestDto.getPreferredAgeMin(),
+                requestDto.getPreferredAgeMax()
+        );
+        MemberPreference updatePreferences = memberPreferenceRepository.save(memberPreference);
+        log.info("사용자 선호도 수정 완료 - memberId: {}, preferencesId: {}", memberId, updatePreferences.getId());
+        return MemberPreferencesResponseDto.from(updatePreferences);
+    }
+    @Transactional
+    public void deleteMemberPreferences(Long memberId) {
+        MemberPreference memberPreference = memberPreferenceRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+        memberPreferenceRepository.delete(memberPreference);
+        log.info("사용자 선호도 삭제 완료 - memberId: {}, preferencesId: {}", memberId, memberPreference.getId());
     }
 }
