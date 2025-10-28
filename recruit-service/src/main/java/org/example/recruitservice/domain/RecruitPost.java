@@ -110,6 +110,9 @@ public class RecruitPost {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
+    private List<Bookmark> bookmarks = new ArrayList<>();
+
     public void updatePost(RecruitRequest dto) {
         if (dto.getTitle() != null) {
             this.title = dto.getTitle();
