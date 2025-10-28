@@ -4,8 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.apiPayload.response.ApiResponse;
-import org.example.memberservice.dto.MemberPreferencesRequestDto;
-import org.example.memberservice.dto.MemberPreferencesResponseDto;
+import org.example.memberservice.dto.memberPreferences.MemberPreferencesRequestDto;
+import org.example.memberservice.dto.memberPreferences.MemberPreferencesResponseDto;
 import org.example.memberservice.service.MemberPreferenceService;
 import org.springframework.web.bind.annotation.*;
 

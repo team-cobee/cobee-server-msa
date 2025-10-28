@@ -12,7 +12,7 @@ spring:
       uri: http://localhost:8888       # config server 주소
 
   datasource:
-    url: jdbc:postgresql://${DB_HOST}:5433/${DB_NAME}
+    url: jdbc:postgresql://${DB_HOST}:5433/${DB_NAME} # pr 날릴때는 : 5432로 수정해야할 듯...
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:'' }
     driver-class-name: org.postgresql.Driver

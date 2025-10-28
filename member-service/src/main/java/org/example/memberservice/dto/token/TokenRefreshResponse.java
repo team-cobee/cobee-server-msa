@@ -1,4 +1,4 @@
-package org.example.memberservice.dto;
+package org.example.memberservice.dto.token;
 
 import lombok.Builder;
 import lombok.Getter;
