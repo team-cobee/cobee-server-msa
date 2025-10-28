@@ -20,9 +20,9 @@ public class RecruitController {
     private final RecruitService recruitService;
     private final ApplyService applyService;
 
-    @PostMapping("")
-    public ApiResponse<RecruitResponse> createRecruit(@RequestBody RecruitRequest recruitRequest,
-                                                      @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId) {
+    @PostMapping("/{memberId}")
+    public ApiResponse<RecruitResponse> createRecruit(@RequestBody RecruitRequest recruitRequest, @PathVariable Long memberId) {
+                                                     // @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId) {
         return ApiResponse.success("구인글 생성 완료", "RECRUIT-001", recruitService.createRecruitPost(recruitRequest, memberId));
     }
 
