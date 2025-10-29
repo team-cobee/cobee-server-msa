@@ -1,8 +1,5 @@
-package org.example.memberservice.dto;
+package org.example.memberservice.dto.memberPreferences;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

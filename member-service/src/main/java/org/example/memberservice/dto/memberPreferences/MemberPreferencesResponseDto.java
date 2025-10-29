@@ -1,8 +1,5 @@
-package org.example.memberservice.dto;
+package org.example.memberservice.dto.memberPreferences;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import org.example.memberservice.domain.MemberPreference;

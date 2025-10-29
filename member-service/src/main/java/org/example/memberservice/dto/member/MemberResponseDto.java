@@ -1,4 +1,4 @@
-package org.example.memberservice.dto;
+package org.example.memberservice.dto.member;
 
 import lombok.Builder;
 import lombok.Getter;

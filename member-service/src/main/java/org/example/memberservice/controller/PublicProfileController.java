@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.apiPayload.error.exception.CustomException;
 import org.example.common.apiPayload.response.ApiResponse;
-import org.example.memberservice.dto.PublicProfileRequestDto;
-import org.example.memberservice.dto.PublicProfileResponseDto;
-import org.example.memberservice.dto.PublicProfileUpdateRequestDto;
+import org.example.memberservice.dto.publicProfile.PublicProfileRequestDto;
+import org.example.memberservice.dto.publicProfile.PublicProfileResponseDto;
+import org.example.memberservice.dto.publicProfile.PublicProfileUpdateRequestDto;
 import org.example.memberservice.service.PublicProfileService;
 import org.springframework.web.bind.annotation.*;
 

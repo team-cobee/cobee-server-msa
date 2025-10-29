@@ -1,9 +1,8 @@
 package org.example.memberservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.common.apiPayload.error.exception.CustomException;
 import org.example.memberservice.domain.Member;
-import org.example.memberservice.dto.MemberResponseDto;
+import org.example.memberservice.dto.member.MemberResponseDto;
 import org.example.memberservice.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

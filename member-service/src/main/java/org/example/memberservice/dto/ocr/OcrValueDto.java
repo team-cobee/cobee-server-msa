@@ -1,4 +1,4 @@
-package org.example.memberservice.dto;
+package org.example.memberservice.dto.ocr;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

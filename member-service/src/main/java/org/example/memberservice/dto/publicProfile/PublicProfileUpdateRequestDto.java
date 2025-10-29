@@ -1,4 +1,4 @@
-package org.example.memberservice.dto;
+package org.example.memberservice.dto.publicProfile;
 
 import org.example.memberservice.domain.enums.LifeStyle;
 import org.example.memberservice.domain.enums.Personality;

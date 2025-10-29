@@ -56,4 +56,8 @@ public interface ApplyRepository extends JpaRepository<ApplyRecord, Long> {
     // 지원했는지 여부 체크하는 메서드
     Optional<ApplyRecord> findApplyRecordsByAppliedMemberIdAndPostId(@Param("memberId") Long memberId, @Param("postId") Long postId);
 
+    List<ApplyRecord> findAllByUpdatedAtAfter(java.time.LocalDateTime updatedAt);
+
+    @Query("SELECT ar FROM ApplyRecord ar")
+    List<ApplyRecord> findAllForSync();
 }
