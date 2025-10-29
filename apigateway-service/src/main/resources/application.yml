@@ -10,6 +10,11 @@ spring:
     config:
       uri: http://localhost:8888         # ★ Config Server 주소
     gateway:
+      default-filters:
+        - name: AddRequestHeader
+          args:
+            name: X-Sync-Key
+            value: ${SYNC_SECRET_KEY}
       server:
         webflux:
           routes:
@@ -25,6 +30,24 @@ spring:
               uri: lb://MEMBER-SERVICE
               predicates:
                 - Path=/auth/refresh
+            - id: member-sync
+              uri: lb://MEMBER-SERVICE
+              predicates:
+                - Path=/sync/members/**
+              filters:
+                - name: AddRequestHeader
+                  args:
+                    name: X-Sync-Key
+                    value: ${SYNC_SECRET_KEY}
+            - id: recruit-sync
+              uri: lb://RECRUIT-SERVICE
+              predicates:
+                - Path=/sync/**
+              filters:
+                - name: AddRequestHeader
+                  args:
+                    name: X-Sync-Key
+                    value: ${SYNC_SECRET_KEY}
             - id: member-preferences
               uri: lb://MEMBER-SERVICE
               predicates:

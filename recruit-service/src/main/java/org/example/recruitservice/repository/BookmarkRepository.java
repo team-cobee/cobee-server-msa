@@ -19,4 +19,9 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     Optional<Bookmark> findById(Long bookmarkId);
 
     int deleteByMemberId(Long memberId);
+
+    List<Bookmark> findAllByUpdatedAtAfter(java.time.LocalDateTime updatedAt);
+
+    @Query("SELECT b FROM Bookmark b")
+    List<Bookmark> findAllForSync();
 }

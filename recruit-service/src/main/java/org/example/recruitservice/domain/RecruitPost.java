@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.common.BaseEntity;
 import org.example.recruitservice.domain.Enum.Gender;
 import org.example.recruitservice.domain.Enum.LifeStyle;
 import org.example.recruitservice.domain.Enum.Personality;
@@ -19,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Builder
-public class RecruitPost {
+public class RecruitPost extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
