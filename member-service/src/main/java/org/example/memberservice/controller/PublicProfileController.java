@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.apiPayload.error.exception.CustomException;
 import org.example.common.apiPayload.response.ApiResponse;
+import org.example.common.constant.GatewayConstant;
 import org.example.memberservice.dto.publicProfile.PublicProfileRequestDto;
 import org.example.memberservice.dto.publicProfile.PublicProfileResponseDto;
 import org.example.memberservice.dto.publicProfile.PublicProfileUpdateRequestDto;
@@ -18,10 +19,9 @@ public class PublicProfileController {
 
     private final PublicProfileService publicProfileService;
 
-    @PostMapping("/{memberId}")
+    @PostMapping()
     public ApiResponse<Void> createPublicProfile(
-            //@RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
-            @PathVariable Long memberId,
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
             @RequestBody PublicProfileRequestDto requestDto) {
         try {
             publicProfileService.createPublicProfile(memberId, requestDto);
@@ -34,27 +34,25 @@ public class PublicProfileController {
         }
     }
 
-    @GetMapping("/{memberId}")
+    @GetMapping()
     public ApiResponse<PublicProfileResponseDto> getPublicProfile(
-            //@RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId
-            @PathVariable Long memberId) {
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId
+    ) {
         PublicProfileResponseDto profile = publicProfileService.getPublicProfile(memberId);
         return ApiResponse.success("Public profile retrieved successfully", "200", profile);
     }
 
-    @PatchMapping("/{memberId}")
+    @PatchMapping()
     public ApiResponse<Void> updatePublicProfile(
-            //@RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
-            @PathVariable Long memberId,
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
             @RequestBody PublicProfileUpdateRequestDto requestDto) {
         publicProfileService.updatePublicProfile(memberId, requestDto);
         return ApiResponse.success("Public profile modified successfully", "200");
     }
 
-    @DeleteMapping("/{memberId}")
+    @DeleteMapping("")
     public ApiResponse<Void> deletePublicProfile(
-            //@RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
-            @PathVariable Long memberId
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId
     ) {
         publicProfileService.deletePublicProfile(memberId);
         return ApiResponse.success("Public profile deleted successfully", "200");
@@ -62,7 +60,7 @@ public class PublicProfileController {
 
     @GetMapping("/p-id/{publicProfileId}")
     public ApiResponse<PublicProfileResponseDto> getPublicProfileById(
-            //@RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
             @PathVariable Long publicProfileId
     ) {
         try {

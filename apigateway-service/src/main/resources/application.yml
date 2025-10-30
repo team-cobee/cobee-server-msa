@@ -52,19 +52,19 @@ spring:
               uri: lb://MEMBER-SERVICE
               predicates:
                 - Path=/preferences/**
-#              filters:
-#                - AuthorizationHeaderFilter
+              filters:
+                - AuthorizationHeaderFilter
             - id: member-profile
               uri: lb://MEMBER-SERVICE
               predicates:
                 - Path=/public-profiles/**
-#              filters:
-#                - AuthorizationHeaderFilter
+              filters:
+                - AuthorizationHeaderFilter
             - id: bookmark
               uri: lb://RECRUIT-SERVICE
               predicates: Path=/bookmark/**
-#              filters:
-#                - AuthorizationHeaderFilter
+              filters:
+                - AuthorizationHeaderFilter
             - id: member-auth
               uri: lb://MEMBER-SERVICE
               predicates:

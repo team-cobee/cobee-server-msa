@@ -27,12 +27,16 @@ public class RecruitController {
     }
 
     @PatchMapping("/{postId}")
-    public ApiResponse<RecruitResponse> updateRecruit(@PathVariable("postId") Long postId, @RequestBody RecruitRequest recruitRequest) {
+    public ApiResponse<RecruitResponse> updateRecruit(
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
+            @PathVariable("postId") Long postId,
+            @RequestBody RecruitRequest recruitRequest) {
         return ApiResponse.success("구인글 수정 완료", "RECRUIT-002", recruitService.updateRecruit(postId,recruitRequest));
     }
 
     @GetMapping("/{postId}")
-    public ApiResponse<RecruitResponse> getRecruitInfo(@PathVariable("postId") Long postId) {
+    public ApiResponse<RecruitResponse> getRecruitInfo(
+            @PathVariable("postId") Long postId) {
         return ApiResponse.success("구인글 조회 완료", "RECRUIT-003", recruitService.getOneRecruitInfo(postId));
     }
 
@@ -42,18 +46,25 @@ public class RecruitController {
     }
 
     @GetMapping("/my")
-    public ApiResponse<List<RecruitCoreResponse>> getMyRecruitPostsInfo(@RequestParam Long userId) {
+    public ApiResponse<List<RecruitCoreResponse>> getMyRecruitPostsInfo(
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long userId
+    ) {
         return ApiResponse.success("나의 구인글 모두 조회 완료", "RECRUIT-005",recruitService.getMyAllRecruitInfo(userId));
     }
 
     @DeleteMapping("/{postId}")
-    public ApiResponse<String> deleteRecruit(@PathVariable("postId") Long postId) {
+    public ApiResponse<String> deleteRecruit(
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
+            @PathVariable("postId") Long postId
+    ) {
         return ApiResponse.success("구인글 삭제하기 완료", "RECRUIT-006", recruitService.deleteRecruitPost(postId));
     }
 
 
     @DeleteMapping("/by-member/{memberId}")
-    public ResponseEntity<Void> deleteAllRecruitDataByMemberId(@PathVariable("memberId") Long memberId){
+    public ResponseEntity<Void> deleteAllRecruitDataByMemberId(
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId
+    ){
         recruitService.deleteAllRecruitData(memberId);
         applyService.deleteAllApplyData(memberId);
         return ResponseEntity.ok().build();
