@@ -72,4 +72,12 @@ public class Member extends BaseEntity {
     public void updateOcrValidation(boolean ocrValidation) {
         this.ocrValidation = ocrValidation;
     }
+
+    public void setPublicProfile(PublicProfile publicProfile) {
+        this.publicProfile = publicProfile;
+    }
+
+    public void setIsCompleted(Boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
 }

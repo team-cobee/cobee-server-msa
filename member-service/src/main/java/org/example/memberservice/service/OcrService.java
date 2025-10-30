@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.memberservice.domain.Member;
-import org.example.memberservice.dto.MemberInfoDto;
+import org.example.memberservice.dto.member.MemberInfoDto;
 import org.example.memberservice.repository.MemberRepository;
 import org.example.memberservice.util.CryptoUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +30,7 @@ public class OcrService {
     @Value("${nhn.ocr.url}")
     private String apiUrl;
 
-    @Value("${OCR_APPKEY}")
+    @Value("${OCR_APP_KEY}")
     private String appkey;
 
     @Value("${nhn.ocr.secret-key}")

@@ -1,20 +1,17 @@
 package org.example.memberservice.service;
 
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.memberservice.client.RecruitClient;
 import org.example.memberservice.domain.Member;
-import org.example.memberservice.dto.MemberInfoDto;
-import org.example.memberservice.dto.MemberResponseDto;
-import org.example.memberservice.dto.TokenRefreshResponse;
+import org.example.memberservice.dto.member.MemberInfoDto;
+import org.example.memberservice.dto.token.TokenRefreshResponse;
 import org.example.memberservice.jwt.JwtProvider;
 import org.example.memberservice.repository.MemberRepository;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Service

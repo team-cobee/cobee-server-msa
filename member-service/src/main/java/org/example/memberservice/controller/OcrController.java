@@ -3,7 +3,7 @@ package org.example.memberservice.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.common.apiPayload.response.ApiResponse;
 import org.example.common.constant.GatewayConstant;
-import org.example.memberservice.dto.MemberInfoDto;
+import org.example.memberservice.dto.member.MemberInfoDto;
 import org.example.memberservice.service.OcrService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

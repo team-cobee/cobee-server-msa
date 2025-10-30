@@ -19,6 +19,9 @@ spec:
           image: 65553a5d-kr1-registry.container.nhncloud.com/cobee-server/apigateway-service:latest
           ports:
             - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: cobee-secret
           # 환경 변수를 통해 Eureka 및 Config Server 설정
           env:
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
@@ -28,4 +31,9 @@ spec:
           resources:
             limits:
               memory: "512Mi"
-              cpu: "500m"
+              cpu: "250m"
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+      imagePullSecrets:
+        - name: registry-credential

@@ -3,9 +3,9 @@ package org.example.memberservice.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.common.apiPayload.response.ApiResponse;
 import org.example.common.constant.GatewayConstant;
-import org.example.memberservice.dto.MemberInfoDto;
-import org.example.memberservice.dto.TokenRefreshRequest;
-import org.example.memberservice.dto.TokenRefreshResponse;
+import org.example.memberservice.dto.member.MemberInfoDto;
+import org.example.memberservice.dto.token.TokenRefreshRequest;
+import org.example.memberservice.dto.token.TokenRefreshResponse;
 import org.example.memberservice.service.AuthService;
 import org.springframework.web.bind.annotation.*;
 
