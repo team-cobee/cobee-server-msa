@@ -17,8 +17,7 @@ public class BookmarkController {
 
     @PostMapping("/{postId}/{memberId}")
     public ApiResponse<BookmarkResponse> addBookmark(
-            //@RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
-            @PathVariable(name = "memberId") Long memberId,
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
             @PathVariable(name = "postId") Long postId
     ) {
         BookmarkResponse bookmarkResponse = bookmarkService.addBookmark(memberId, postId);
@@ -27,8 +26,7 @@ public class BookmarkController {
 
     @GetMapping("/{memberId}")
     public ApiResponse<BookmarkListResponse> getBookmarkList(
-            //@RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId
-            @PathVariable(name = "memberId") Long memberId
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId
     ){
         BookmarkListResponse bookmarkList = bookmarkService.getBookmarkList(memberId);
         return ApiResponse.success("bookmark 목록 반환 완료", "GET_BOOKMARK", bookmarkList);
@@ -36,8 +34,7 @@ public class BookmarkController {
 
     @DeleteMapping("/{bookmarkId}/{memberId}")
     public ApiResponse<BookmarkResponse> deleteBookmark(
-            //@RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
-            @PathVariable(name = "memberId") Long memberId,
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
             @PathVariable(name = "bookmarkId") Long bookmarkId
     ) {
         BookmarkResponse bookmarkResponse = bookmarkService.deleteBookmark(bookmarkId, memberId);
@@ -46,8 +43,7 @@ public class BookmarkController {
 
     @DeleteMapping("/all/{memberId}")
     public ApiResponse<String> deleteAllBookmark(
-            //@RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId
-            @PathVariable(name = "memberId") Long memberId
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId
     ){
         int bookmarkCount = bookmarkService.deleteAllBookmark(memberId);
         return ApiResponse.success("bookmark 전체 삭제", "DELETE_ALL_BOOKMARK", "bookmark 해제 개수 : " + bookmarkCount);
