@@ -9,6 +9,7 @@ import org.example.alarmservice.dto.CreateAlarmRequest;
 import org.example.alarmservice.repository.AlarmNoticeRepository;
 import org.example.alarmservice.repository.AlarmRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,9 +19,9 @@ import java.util.List;
 public class AlarmNoticeService {
     private final AlarmRepository alarmRepository;
     private final AlarmNoticeRepository alarmNoticeRepository;
-    private final PushTokenService pushTokenService;
     private final NhnPushClient nhnPushClient;
 
+    @Transactional
     public void createNotice(CreateAlarmRequest request) {
         Alarm alarm = Alarm.builder()
                 .alarmType(request.getAlarmType())
@@ -38,16 +39,10 @@ public class AlarmNoticeService {
                 .build();
         alarmNoticeRepository.save(notice);
 
-        List<String> tokens = pushTokenService.getTokensByUserId(String.valueOf(request.getToUserId()));
-        if (tokens.isEmpty()) {
-            log.debug("No active push tokens for user {}", request.getToUserId());
-            return;
-        }
+        List<String> userIds = List.of(String.valueOf(request.getToUserId()));
 
-        nhnPushClient.sendByTokens(tokens, request.getTitle(), request.getBody(), request.getData())
+        nhnPushClient.sendByUserIds(userIds, request.getTitle(), request.getBody(), request.getData())
                 .doOnError(error -> log.warn("Failed to send push notification to user {}: {}", request.getToUserId(), error.getMessage()))
                 .subscribe();
-
-       // return AlarmInfoResponse;
     }
 }

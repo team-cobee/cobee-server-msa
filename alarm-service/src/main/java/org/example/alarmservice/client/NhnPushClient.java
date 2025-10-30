@@ -30,22 +30,23 @@ public class NhnPushClient {
     private String secretKey;
 
     /**
-     * NHN에 토큰을 사전 등록(바인딩)하는 API가 있으면 여기에 구현.
-     * 엔드포인트/스키마는 NHN 문서대로
+     * NHN에 토큰을 사전 등록(바인딩)하는 API.
+     * 엔드포인트/스키마는 NHN v2.4 문서를 따름.
      */
     @Retry(name = "nhnPush") @CircuitBreaker(name = "nhnPush")
     public Mono<Void> registerToken(String userId, String token) {
+        // TODO: 토큰 등록에 필요한 추가 필드(isNotificationAgreement 등) 처리 필요
         Map<String, Object> body = Map.of(
-                "userId", userId,
+                "uid", userId,
                 "token", token,
                 "pushType", "FCM"     // iOS라면 APNS
         );
 
-        String path = String.format("%s/push/v2/appkeys/%s/tokens", baseUrl, appKey);
+        String path = String.format("%s/push/v2.4/appkeys/%s/tokens", baseUrl, appKey);
 
         return webClient.post()
                 .uri(path)
-                .header("X-Secret-Key", secretKey) // 헤더 키 이름은 문서 확인
+                .header("X-Secret-Key", secretKey)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(body)
                 .retrieve()
@@ -55,73 +56,32 @@ public class NhnPushClient {
     }
 
     /**
-     * 토큰 목록으로 직접 발송 (사전 등록 없이)
-     * NHN의 실제 요청 스키마/엔드포인트와 필드명은 문서대로
-     */
-    @Retry(name = "nhnPush") @CircuitBreaker(name = "nhnPush")
-    public Mono<Void> sendByTokens(List<String> tokens, String title, String body, Map<String, String> data) {
-        Map<String, Object> payload = Map.of(
-                "target", Map.of(
-                        "type", "TOKEN",           // TOKEN or USER_ID
-                        "to", tokens
-                ),
-                "content", Map.of(
-                        "default", Map.of("title", title, "body", body),
-                        "android", Map.of(
-                                "title", title,
-                                "body", body,
-                                "data", data != null ? data : Map.of()
-                        )
-                ),
-                "options", Map.of(
-                        "scheduleType", "IMMEDIATE"
-                )
-        );
-
-        String path = String.format("%s/push/v2/appkeys/%s/messages", baseUrl, appKey); // 체크하기
-
-        return webClient.post()
-                .uri(path)
-                .header("X-Secret-Key", secretKey) // 체크하기
-                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(payload)
-                .retrieve()
-                .toBodilessEntity()
-                .doOnSuccess(r -> log.info("NHN push sent (tokens.size={}), status={}", tokens.size(), r.getStatusCode()))
-                .then();
-    }
-
-    /**
-     * (선택) userId 대상으로 발송 (사전 바인딩이 된 경우)
+     * userId 대상으로 발송 (사전 바인딩이 된 경우)
      */
     @Retry(name = "nhnPush") @CircuitBreaker(name = "nhnPush")
     public Mono<Void> sendByUserIds(List<String> userIds, String title, String body, Map<String, String> data) {
         Map<String, Object> payload = Map.of(
                 "target", Map.of(
-                        "type", "USER_ID",
+                        "type", "UID",
                         "to", userIds
                 ),
                 "content", Map.of(
-                        "default", Map.of("title", title, "body", body),
-                        "android", Map.of(
-                                "title", title,
-                                "body", body,
-                                "data", data != null ? data : Map.of()
-                        )
+                        "default", Map.of("title", title, "body", body)
+                        // TODO: android, ios specific content if needed. For custom data, use customKey field inside default.
                 ),
-                "options", Map.of("scheduleType", "IMMEDIATE")
+                "messageType", "NOTIFICATION"
         );
 
-        String path = String.format("%s/push/v2/appkeys/%s/messages", baseUrl, appKey); // 체크하기
+        String path = String.format("%s/push/v2.4/appkeys/%s/messages", baseUrl, appKey);
 
         return webClient.post()
                 .uri(path)
-                .header("X-Secret-Key", secretKey) // 체크하기
+                .header("X-Secret-Key", secretKey)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(payload)
                 .retrieve()
                 .toBodilessEntity()
+                .doOnSuccess(r -> log.info("NHN push sent to userIds ({}), status={}", userIds, r.getStatusCode()))
                 .then();
     }
 }
