@@ -42,3 +42,9 @@ eureka:
       defaultZone: http://eureka-service:8761/eureka/
   instance:
     prefer-ip-address: true
+
+nhn:
+  push:
+    base-url: ${NHN_PUSH_BASE_URL}
+    app-key: ${NHN_PUSH_APP_KEY}
+    secret-key: ${NHN_PUSH_SECRET_KEY}
