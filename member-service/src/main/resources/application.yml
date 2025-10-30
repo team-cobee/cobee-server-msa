@@ -8,7 +8,7 @@ spring:
     import: "optional:configserver:"   # 추가가 핵심
   cloud:
     config:
-      uri: http://localhost:8888       # config server 주소
+      uri: http://config-service:8888       # config server 주소
 
   datasource:
     url: ${POSTGRES_URL}
