@@ -9,7 +9,7 @@ spring:
     import: "optional:configserver:"   # 추가가 핵심
   cloud:
     config:
-      uri: http://localhost:8888       # config server 주소
+      uri: http://config-service:8888       # config server 주소
 
   datasource:
     url: jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}
@@ -41,6 +41,6 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka-service:8761/eureka
   instance:
     prefer-ip-address: true
