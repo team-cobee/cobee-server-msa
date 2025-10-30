@@ -23,6 +23,12 @@ public class AlarmNotice {
     @Column(nullable = false)
     private Long toUserId;
 
+    @Column
+    private String title;
+
+    @Column
+    private String body;
+
     @ManyToOne
     @JoinColumn(name="alarm_id")
     private Alarm alarm;

@@ -4,9 +4,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.alarmservice.client.NhnPushClient;
+import org.example.alarmservice.dto.CreateAlarmRequest;
 import org.example.alarmservice.dto.PushSendByTokensRequest;
 import org.example.alarmservice.dto.RegisterTokenRequest;
+import org.example.alarmservice.repository.AlarmNoticeRepository;
+import org.example.alarmservice.service.AlarmNoticeService;
 import org.example.alarmservice.service.PushTokenService;
+import org.example.common.apiPayload.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -18,6 +22,7 @@ import reactor.core.publisher.Mono;
 public class AlarmController {
     private final PushTokenService pushTokenService;
     private final NhnPushClient nhn;
+    private final AlarmNoticeService alarmNotificationService;
 
     @PostMapping("/register")
     public Mono<ResponseEntity<Void>> register(@RequestBody @Valid RegisterTokenRequest req) {
@@ -41,6 +46,17 @@ public class AlarmController {
             return null;
         }
 
+    }
+
+    @PostMapping("/notices")
+    public ApiResponse<Void> createAlarm(@RequestBody @Valid CreateAlarmRequest request) {
+        try {
+            alarmNotificationService.createNotice(request);
+            return ApiResponse.success("알림발송 완료", "");
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            return ApiResponse.failure("", "", e.getMessage());
+        }
     }
 
 }
