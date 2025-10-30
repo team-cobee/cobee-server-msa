@@ -24,7 +24,9 @@ public class CommentController {
     }
 
     @GetMapping("/{postId}")
-    public ApiResponse<List<CommentResponse>> getAllComments(@PathVariable(name = "postId") Long postId){
+    public ApiResponse<List<CommentResponse>> getAllComments(
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
+            @PathVariable(name = "postId") Long postId){
         return ApiResponse.success("해당 구인글의 댓글 조회 완료", "COMMENT-002", commentService.getAllCommentsInfo(postId));
     }
 
