@@ -15,6 +15,7 @@ import org.example.recruitservice.dto.converter.RecruitConverter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -23,9 +24,14 @@ import java.util.Objects;
 public class RecruitService {
     private final RecruitRepository recruitRepository;
     private final MemberClient memberClient;
+    private final GoogleMapService googleMapService;
 
     public RecruitResponse createRecruitPost(RecruitRequest recruitPost, Long memberId) {
         ApiResponse<MemberCoreResponse> memberInfoResponse = memberClient.getMyInfo(memberId);
+        Map<String, Object> geocodeData = googleMapService.getGeocode(recruitPost.getAddress());
+        double latitude = (double) geocodeData.get("latitude");
+        double longitude = (double) geocodeData.get("longitude");
+        String formattedAddress = (String) geocodeData.get("formattedAddress");
 
         MemberCoreResponse memberInfo;
         if (memberInfoResponse != null && memberInfoResponse.isSuccess() && memberInfoResponse.getData() != null) {
@@ -58,7 +64,9 @@ public class RecruitService {
                 .isSnoring(recruitPost.getIsSnoring())
                 .hasPet(recruitPost.getHasPet())
                 .hasRoom(recruitPost.getHasRoom())
-                .address(recruitPost.getAddress())
+                .address(formattedAddress)
+                .regionLatitude(latitude)
+                .regionLongitude(longitude)
                 .detailDescription(recruitPost.getDetailDescription())
                 .additionalDescription(recruitPost.getAdditionalDescription())
                 .status(RecruitStatus.RECRUITING) // 구인글 등록하자마자 구인중으로 변경
@@ -72,7 +80,11 @@ public class RecruitService {
 
     public RecruitResponse updateRecruit(Long postId, RecruitRequest recruitRequest) {
         RecruitPost post = recruitRepository.findById(postId).orElseThrow();  // 에러 처리도 해야하는데...
-        post.updatePost(recruitRequest);
+        Map<String, Object> geocodeData = null;
+        if (recruitRequest.getAddress() != null && !recruitRequest.getAddress().equals(post.getAddress())) {
+            geocodeData = googleMapService.getGeocode(recruitRequest.getAddress());
+        }
+        post.updatePost(recruitRequest, geocodeData);
         recruitRepository.save(post);
         return RecruitConverter.from(post);
     }

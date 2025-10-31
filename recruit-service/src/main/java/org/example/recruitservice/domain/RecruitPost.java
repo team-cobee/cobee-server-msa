@@ -14,6 +14,7 @@ import org.example.recruitservice.dto.recruit.RecruitRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @NoArgsConstructor
@@ -114,7 +115,7 @@ public class RecruitPost extends BaseEntity {
     @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
-    public void updatePost(RecruitRequest dto) {
+    public void updatePost(RecruitRequest dto, Map<String, Object> geocodeData) {
         if (dto.getTitle() != null) {
             this.title = dto.getTitle();
         }
@@ -168,6 +169,11 @@ public class RecruitPost extends BaseEntity {
         }
         if (dto.getAdditionalDescription() != null) {
             this.additionalDescription = dto.getAdditionalDescription();
+        }
+        if (geocodeData != null) {
+            this.address = (String) geocodeData.get("formattedAddress");
+            this.regionLatitude = (Double) geocodeData.get("latitude");
+            this.regionLongitude = (Double) geocodeData.get("longitude");
         }
     }
 
