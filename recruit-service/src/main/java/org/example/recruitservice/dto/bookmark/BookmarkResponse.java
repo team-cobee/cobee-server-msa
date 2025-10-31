@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 public class BookmarkResponse {
     private Long postId;
+    private Long bookmarkId;
     private String title;
     private RecruitStatus status;
     private String authorName;
@@ -37,6 +38,7 @@ public class BookmarkResponse {
     public static BookmarkResponse from(RecruitPost post, Bookmark bookmark) {
         return BookmarkResponse.builder()
                 .postId(post.getId())
+                .bookmarkId(bookmark.getId())
                 .title(post.getTitle())
                 .status(post.getStatus())
                 .authorName(post.getOwnerName())

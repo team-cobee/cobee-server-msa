@@ -15,7 +15,7 @@ public class BookmarkController {
 
     private final BookmarkService bookmarkService;
 
-    @PostMapping("/{postId}/{memberId}")
+    @PostMapping("/{postId}")
     public ApiResponse<BookmarkResponse> addBookmark(
             @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
             @PathVariable(name = "postId") Long postId
@@ -24,7 +24,7 @@ public class BookmarkController {
         return ApiResponse.success("bookmark 추가 완료", "ADD_BOOKMARK", bookmarkResponse);
     }
 
-    @GetMapping("/{memberId}")
+    @GetMapping("")
     public ApiResponse<BookmarkListResponse> getBookmarkList(
             @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId
     ){
@@ -32,7 +32,7 @@ public class BookmarkController {
         return ApiResponse.success("bookmark 목록 반환 완료", "GET_BOOKMARK", bookmarkList);
     }
 
-    @DeleteMapping("/{bookmarkId}/{memberId}")
+    @DeleteMapping("/{bookmarkId}")
     public ApiResponse<BookmarkResponse> deleteBookmark(
             @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
             @PathVariable(name = "bookmarkId") Long bookmarkId
@@ -41,7 +41,7 @@ public class BookmarkController {
         return ApiResponse.success("bookmark 삭제", "DELETE_BOOKMARK", bookmarkResponse);
     }
 
-    @DeleteMapping("/all/{memberId}")
+    @DeleteMapping("/all")
     public ApiResponse<String> deleteAllBookmark(
             @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId
     ){
