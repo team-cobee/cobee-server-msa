@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.common.apiPayload.response.ApiResponse;
 import org.example.recruitservice.client.MemberClient;
 import org.example.recruitservice.dto.MemberCoreResponse;
+import org.example.recruitservice.dto.map.RecruitMapFilterResponse;
 import org.example.recruitservice.dto.recruit.RecruitCoreResponse;
 import org.example.recruitservice.repository.RecruitRepository;
 import org.example.recruitservice.domain.Enum.RecruitStatus;
@@ -15,7 +16,9 @@ import org.example.recruitservice.dto.converter.RecruitConverter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +26,14 @@ import java.util.Objects;
 public class RecruitService {
     private final RecruitRepository recruitRepository;
     private final MemberClient memberClient;
+    private final GoogleMapService googleMapService;
 
     public RecruitResponse createRecruitPost(RecruitRequest recruitPost, Long memberId) {
         ApiResponse<MemberCoreResponse> memberInfoResponse = memberClient.getMyInfo(memberId);
+        Map<String, Object> geocodeData = googleMapService.getGeocode(recruitPost.getAddress());
+        double latitude = (double) geocodeData.get("latitude");
+        double longitude = (double) geocodeData.get("longitude");
+        String formattedAddress = (String) geocodeData.get("formattedAddress");
 
         MemberCoreResponse memberInfo;
         if (memberInfoResponse != null && memberInfoResponse.isSuccess() && memberInfoResponse.getData() != null) {
@@ -58,7 +66,9 @@ public class RecruitService {
                 .isSnoring(recruitPost.getIsSnoring())
                 .hasPet(recruitPost.getHasPet())
                 .hasRoom(recruitPost.getHasRoom())
-                .address(recruitPost.getAddress())
+                .address(formattedAddress)
+                .regionLatitude(latitude)
+                .regionLongitude(longitude)
                 .detailDescription(recruitPost.getDetailDescription())
                 .additionalDescription(recruitPost.getAdditionalDescription())
                 .status(RecruitStatus.RECRUITING) // 구인글 등록하자마자 구인중으로 변경
@@ -72,7 +82,11 @@ public class RecruitService {
 
     public RecruitResponse updateRecruit(Long postId, RecruitRequest recruitRequest) {
         RecruitPost post = recruitRepository.findById(postId).orElseThrow();  // 에러 처리도 해야하는데...
-        post.updatePost(recruitRequest);
+        Map<String, Object> geocodeData = null;
+        if (recruitRequest.getAddress() != null && !recruitRequest.getAddress().equals(post.getAddress())) {
+            geocodeData = googleMapService.getGeocode(recruitRequest.getAddress());
+        }
+        post.updatePost(recruitRequest, geocodeData);
         recruitRepository.save(post);
         return RecruitConverter.from(post);
     }
@@ -106,5 +120,22 @@ public class RecruitService {
         // 해당 멤버가 작성한 모든 구인글을 찾아서 삭제
         List<RecruitPost> posts = recruitRepository.findAllByOwnerId(memberId);
         recruitRepository.deleteAll(posts);
+    }
+
+    public List<RecruitMapFilterResponse> getfilterRecruitPosts(Double latitude, Double longitude, Double radius,
+                                                                Integer recruitCount, Integer rentCostMin, Integer rentCostMax,
+                                                                Integer monthlyCostMin, Integer monthlyCostMax) {
+        List<RecruitPost> posts;
+
+        if (latitude != null && longitude != null && radius != null) {
+            posts = recruitRepository.findFilteredRecruitPosts(latitude, longitude, radius, recruitCount, rentCostMin,
+                    rentCostMax, monthlyCostMin, monthlyCostMax);
+        } else {
+            posts = recruitRepository.findFilteredRecruitPosts(null, null, null, recruitCount, rentCostMin, rentCostMax,
+                    monthlyCostMin, monthlyCostMax);
+        }
+        return posts.stream()
+                .map(RecruitMapFilterResponse::new)
+                .collect(Collectors.toList());
     }
 }

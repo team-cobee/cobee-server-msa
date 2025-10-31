@@ -1,10 +1,12 @@
 package org.example.recruitservice.dto.recruit;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.example.recruitservice.domain.Enum.Gender;
 import org.example.recruitservice.domain.Enum.LifeStyle;
 import org.example.recruitservice.domain.Enum.Personality;
 import org.example.recruitservice.domain.Enum.RecruitStatus;
+import org.example.recruitservice.domain.RecruitPost;
 import org.example.recruitservice.dto.comment.CommentResponse;
 
 import java.util.List;
