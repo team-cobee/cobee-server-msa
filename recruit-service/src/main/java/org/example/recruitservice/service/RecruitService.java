@@ -3,10 +3,13 @@ package org.example.recruitservice.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.common.apiPayload.response.ApiResponse;
+import org.example.common.nhn.NhnStorageService;
 import org.example.recruitservice.client.MemberClient;
+import org.example.recruitservice.domain.Images;
 import org.example.recruitservice.dto.MemberCoreResponse;
 import org.example.recruitservice.dto.map.RecruitMapFilterResponse;
 import org.example.recruitservice.dto.recruit.RecruitCoreResponse;
+import org.example.recruitservice.repository.ImagesRepository;
 import org.example.recruitservice.repository.RecruitRepository;
 import org.example.recruitservice.domain.Enum.RecruitStatus;
 import org.example.recruitservice.domain.RecruitPost;
@@ -14,7 +17,9 @@ import org.example.recruitservice.dto.recruit.RecruitRequest;
 import org.example.recruitservice.dto.recruit.RecruitResponse;
 import org.example.recruitservice.dto.converter.RecruitConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -27,6 +32,8 @@ public class RecruitService {
     private final RecruitRepository recruitRepository;
     private final MemberClient memberClient;
     private final GoogleMapService googleMapService;
+    private final NhnStorageService nhnStorageService;
+    private final ImagesRepository imagesRepository;
 
     public RecruitResponse createRecruitPost(RecruitRequest recruitPost, Long memberId) {
         ApiResponse<MemberCoreResponse> memberInfoResponse = memberClient.getMyInfo(memberId);
@@ -137,5 +144,44 @@ public class RecruitService {
         return posts.stream()
                 .map(RecruitMapFilterResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<String> addImages(Long postId, Long memberId, MultipartFile[] files) {
+        if (files == null || files.length == 0) {
+            throw new IllegalArgumentException("업로드할 파일이 없습니다.");
+        }
+
+        RecruitPost post = recruitRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("구인글을 찾을 수 없습니다."));
+
+        // 본인 확인
+        if (!post.getOwnerId().equals(memberId)) {
+            // (공통 모듈의 CustomException을 사용하시는 것이 좋습니다)
+            throw new RuntimeException("본인의 구인글에만 이미지를 추가할 수 있습니다.");
+        }
+
+        List<String> imageUrls = new ArrayList<>();
+
+        for (int i = 0; i < files.length; i++) {
+            MultipartFile file = files[i];
+            if (file == null || file.isEmpty()) continue;
+
+            // 1. NHN Storage에 파일 업로드
+            String imageUrl = nhnStorageService.uploadFile(file).block();
+
+            if (imageUrl != null) {
+                // 2. Images 엔티티 생성 및 저장
+                Images image = Images.builder()
+                        .imageUrl(imageUrl)
+                        .originalName(file.getOriginalFilename())
+                        .displayOrder(i + 1)
+                        .recruitPost(post)
+                        .build();
+                imagesRepository.save(image);
+                imageUrls.add(imageUrl);
+            }
+        }
+        return imageUrls;
     }
 }

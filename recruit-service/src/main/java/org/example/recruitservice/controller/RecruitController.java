@@ -10,6 +10,7 @@ import org.example.recruitservice.service.ApplyService;
 import org.example.recruitservice.service.RecruitService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -69,5 +70,19 @@ public class RecruitController {
         recruitService.deleteAllRecruitData(memberId);
         applyService.deleteAllApplyData(memberId);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{postId}/images")
+    public ApiResponse<List<String>> uploadRecruitImages(
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
+            @PathVariable("postId") Long postId,
+            @RequestParam("images") MultipartFile[] images // 여러 파일을 받도록 배열로 설정
+    ) {
+        try {
+            List<String> imageUrls = recruitService.addImages(postId, memberId, images);
+            return ApiResponse.success("구인글 이미지 업로드 완료", "RECRUIT-007", imageUrls);
+        } catch (Exception e) {
+            return ApiResponse.failure("이미지 업로드 실패", "500", e.getMessage());
+        }
     }
 }
