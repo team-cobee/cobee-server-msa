@@ -8,8 +8,10 @@ import org.example.recruitservice.dto.recruit.RecruitRequest;
 import org.example.recruitservice.dto.recruit.RecruitResponse;
 import org.example.recruitservice.service.ApplyService;
 import org.example.recruitservice.service.RecruitService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,19 +22,14 @@ public class RecruitController {
     private final RecruitService recruitService;
     private final ApplyService applyService;
 
-    @PostMapping("")
-    public ApiResponse<RecruitResponse> createRecruit(@RequestBody RecruitRequest recruitRequest,
-                                                      @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId)
+    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<RecruitResponse> createRecruit(
+            @RequestPart("request") RecruitRequest recruitRequest, // 3. @RequestBody -> @RequestPart("key")
+            @RequestPart(value = "images", required = false) MultipartFile[] images, // 4. 이미지 파트 추가
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId)
     {
-        return ApiResponse.success("구인글 생성 완료", "RECRUIT-001", recruitService.createRecruitPost(recruitRequest, memberId));
-    }
-
-    @PatchMapping("/{postId}")
-    public ApiResponse<RecruitResponse> updateRecruit(
-            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
-            @PathVariable("postId") Long postId,
-            @RequestBody RecruitRequest recruitRequest) {
-        return ApiResponse.success("구인글 수정 완료", "RECRUIT-002", recruitService.updateRecruit(postId,recruitRequest));
+        RecruitResponse response = recruitService.createRecruitPostWithImages(recruitRequest, memberId, images);
+        return ApiResponse.success("구인글 생성 완료", "RECRUIT-001", response);
     }
 
     @GetMapping("/{postId}")
@@ -69,5 +66,19 @@ public class RecruitController {
         recruitService.deleteAllRecruitData(memberId);
         applyService.deleteAllApplyData(memberId);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{postId}/images")
+    public ApiResponse<List<String>> uploadRecruitImages(
+            @RequestHeader(GatewayConstant.GATEWAY_AUTH_HEADER) Long memberId,
+            @PathVariable("postId") Long postId,
+            @RequestParam("images") MultipartFile[] images // 여러 파일을 받도록 배열로 설정
+    ) {
+        try {
+            List<String> imageUrls = recruitService.addImages(postId, memberId, images);
+            return ApiResponse.success("구인글 이미지 업로드 완료", "RECRUIT-007", imageUrls);
+        } catch (Exception e) {
+            return ApiResponse.failure("이미지 업로드 실패", "500", e.getMessage());
+        }
     }
 }

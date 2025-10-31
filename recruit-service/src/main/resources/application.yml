@@ -79,6 +79,15 @@ spring:
 google:
   maps:
     api-key: ${GOOGLE_MAPS_API_KEY}
+nhn:
+  storage:
+    identity-endpoint: ${OBJECT_IDENTITY_ENDPOINT}
+    storage-endpoint: ${OBJECT_STORAGE_ENDPOINT}
+    tenant-id: ${OBJECT_TENANT_ID}
+    user-id: ${OBJECT_USER_ID}
+    password: ${OBJECT_PASSWORD}
+    container-name: ${OBJECT_CONTAINER_NAME}
+    account: ${OBJECT_ACCOUNT}
 
 app:
   backend:
