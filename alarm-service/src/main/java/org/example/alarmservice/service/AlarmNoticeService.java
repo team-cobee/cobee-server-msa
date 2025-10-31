@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.alarmservice.client.NhnPushClient;
 import org.example.alarmservice.domain.Alarm;
 import org.example.alarmservice.domain.AlarmNotice;
-import org.example.alarmservice.dto.CreateAlarmRequest;
+import org.example.common.dto.alarm.CreateAlarmRequest;
 import org.example.alarmservice.repository.AlarmNoticeRepository;
 import org.example.alarmservice.repository.AlarmRepository;
 import org.springframework.stereotype.Service;

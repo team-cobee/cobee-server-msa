@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.alarmservice.domain.Enum.AlarmSourceType;
-import org.example.alarmservice.domain.Enum.AlarmType;
+import org.example.common.domain.enums.AlarmSourceType;
+import org.example.common.domain.enums.AlarmType;
 
 @Entity
 @NoArgsConstructor

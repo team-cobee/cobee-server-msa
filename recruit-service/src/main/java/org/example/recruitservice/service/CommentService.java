@@ -3,6 +3,10 @@ package org.example.recruitservice.service;
 import lombok.RequiredArgsConstructor;
 import org.example.common.apiPayload.error.exception.CustomException;
 import org.example.common.apiPayload.response.ApiResponse;
+import org.example.common.domain.enums.AlarmSourceType;
+import org.example.common.domain.enums.AlarmType;
+import org.example.common.dto.alarm.CreateAlarmRequest;
+import org.example.recruitservice.client.AlarmClient;
 import org.example.recruitservice.client.MemberClient;
 import org.example.recruitservice.domain.Comment;
 import org.example.recruitservice.domain.RecruitPost;
@@ -23,6 +27,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final RecruitRepository recruitRepository;
     private final MemberClient memberClient;
+    private final AlarmClient alarmClient;
 
     public CommentResponse createComment(Long postId, CommentRequest request, Long memberId) {
         MemberCoreResponse member = memberClient.getMyInfo(memberId).getData();
@@ -39,13 +44,28 @@ public class CommentService {
                 .parent(parentComment)
                 .build();
 
-        if (parentComment != null) {
-            parentComment.addChild(comment); // 대댓글일 경우 부모 댓글에 추가
-        } else {
-            post.addComment(comment); // 일반 댓글일 경우 게시글에 추가
+        commentRepository.save(comment);
+
+        // Send notification
+        boolean isReply = parentComment != null;
+        String title = isReply ? "대댓글 알림" : "새 댓글 알림";
+        String body = isReply ? "내 댓글에 답글이 달렸어요" : "내 글에 댓글이 달렸어요";
+        Long toUserId = isReply ? parentComment.getCommentAuthorId() : post.getOwnerId();
+
+        // Prevent self-notification
+        if (!memberId.equals(toUserId)) {
+            CreateAlarmRequest alarmRequest = CreateAlarmRequest.builder()
+                    .alarmType(AlarmType.COMMENT)
+                    .sourceType(AlarmSourceType.COMMENT)
+                    .sourceId(comment.getId())
+                    .fromUserId(memberId)
+                    .toUserId(toUserId)
+                    .title(title)
+                    .body(body)
+                    .build();
+            alarmClient.createAlarm(alarmRequest);
         }
 
-        commentRepository.save(comment);
         return CommentConverter.toCommentResponse(comment, member);
     }
 

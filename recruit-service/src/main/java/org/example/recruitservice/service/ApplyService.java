@@ -3,6 +3,10 @@ package org.example.recruitservice.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.common.domain.enums.AlarmSourceType;
+import org.example.common.domain.enums.AlarmType;
+import org.example.common.dto.alarm.CreateAlarmRequest;
+import org.example.recruitservice.client.AlarmClient;
 import org.example.recruitservice.domain.ApplyRecord;
 import org.example.recruitservice.domain.Enum.MatchStatus;
 import org.example.recruitservice.domain.RecruitPost;
@@ -27,12 +31,13 @@ import java.util.Optional;
 public class ApplyService {
     private final ApplyRepository applyRepository;
     private final RecruitRepository recruitRepository;
+    private final AlarmClient alarmClient;
 
     public ApplyResponse applyForRecruit(Long memberId, Long postId) {
         try {
             Optional<ApplyRecord> record = applyRepository.findApplyRecordsByAppliedMemberIdAndPostId(memberId, postId);
             if  (record.isPresent()) {
-                throw new IllegalArgumentException("이미 지원하였습니다.");  // custom exception - 이미 지원하였다고 경고주고 지원못하게 하기
+                throw new IllegalArgumentException("이미 지원하였습니다.");
             } else {
                 RecruitPost recruitPost = recruitRepository.findById(postId).orElseThrow();
                 ApplyRecord apply = ApplyRecord.builder()
@@ -42,6 +47,19 @@ public class ApplyService {
                         .submittedAt(LocalDate.now())
                         .build();
                 applyRepository.save(apply);
+
+                // Send "New Apply" notification
+                CreateAlarmRequest alarmRequest = CreateAlarmRequest.builder()
+                        .alarmType(AlarmType.NEW_APPLY)
+                        .sourceType(AlarmSourceType.RECRUIT_POST)
+                        .sourceId(postId)
+                        .fromUserId(memberId)
+                        .toUserId(recruitPost.getOwnerId())
+                        .title("새로운 지원 알림")
+                        .body("새로운 지원이 도착했습니다.")
+                        .build();
+                alarmClient.createAlarm(alarmRequest);
+
                 return ApplyConverter.from(apply);
             }
         } catch (Exception e) {
@@ -51,15 +69,42 @@ public class ApplyService {
     }
 
     public ApplyResponse acceptOrReject(ApplyAcceptRequest applyAccept) {
-        // 누가 하는지에 대한거 검증 멤버 아이디 받은 이후로 설정하기?
         try {
             ApplyRecord applyRecord = applyRepository.findById(applyAccept.getApplyId()).orElseThrow();
-            //Long checkAuthor = applyRecord.getAppliedMemberId();
-            //if (memberId.equals(checkAuthor)) {
             Boolean accept = applyAccept.getIsAccepted();
             applyRecord.acceptMatching(accept);
             applyRepository.save(applyRecord);
-            //}
+
+            // Send "Matching Result" notification
+            String title = accept ? "매칭 성공" : "매칭 거절";
+            String body = accept ? "매칭이 성사되었습니다." : "매칭이 거절되었습니다.";
+            RecruitPost post = applyRecord.getPost();
+
+            CreateAlarmRequest matchResultAlarm = CreateAlarmRequest.builder()
+                    .alarmType(AlarmType.START_MATCHING)
+                    .sourceType(AlarmSourceType.RECRUIT_POST)
+                    .sourceId(post.getId())
+                    .fromUserId(post.getOwnerId()) // Post author
+                    .toUserId(applyRecord.getAppliedMemberId()) // Applicant
+                    .title(title)
+                    .body(body)
+                    .build();
+            alarmClient.createAlarm(matchResultAlarm);
+
+            // Send "Chatroom Invitation" notification if accepted
+            if (accept) {
+                CreateAlarmRequest invitationAlarm = CreateAlarmRequest.builder()
+                        .alarmType(AlarmType.INVITED)
+                        .sourceType(AlarmSourceType.CHATROOM)
+                        .sourceId(applyRecord.getId()) // Temporary ID, should be chatRoomId
+                        .fromUserId(post.getOwnerId())
+                        .toUserId(applyRecord.getAppliedMemberId())
+                        .title("채팅방 초대")
+                        .body(post.getTitle() + " 채팅방에 초대되었어요.")
+                        .build();
+                alarmClient.createAlarm(invitationAlarm);
+            }
+
             return ApplyConverter.from(applyRecord);
         } catch (Exception e) {
             log.info(e.getMessage());
@@ -87,31 +132,7 @@ public class ApplyService {
     }
 
     public void deleteAllApplyData(Long memberId) {
-        // 해당 멤버의 모든 지원 기록을 찾아서 삭제
         List<ApplyRecord> records = applyRepository.findApplyRecordsByAppliedMemberId(memberId);
         applyRepository.deleteAll(records);
     }
-
-//    public void sendInvitationAlarm(ApplyRecord applyRecord) {
-//        try {
-//            RecruitPost post = applyRecord.getPost();
-//            CreateAlarmRequest request = CreateAlarmRequest.builder()
-//                    .alarmType(AlarmType.INVITED)
-//                    .sourceType(AlarmSourceType.APPLY_RESULT)
-//                    .sourceId(post.getId())
-//                    .fromUserId(post.getOwnerId())
-//                    .toUserId(applyRecord.getAppliedMemberId())
-//                    .title("지원이 수락되었어요")
-//                    .body(String.format("%s 구인글 지원이 수락되었습니다. 채팅방에서 대화를 시작해보세요.", post.getTitle()))
-//                    .data(Map.of(
-//                            "postId", String.valueOf(post.getId()),
-//                            "applyId", String.valueOf(applyRecord.getId()),
-//                            "matchStatus", applyRecord.getMatchStatus().name()
-//                    ))
-//                    .build();
-//            alarmClient.createAlarm(request);
-//        } catch (Exception alarmError) {
-//            log.warn("Failed to create invitation alarm for applyRecord {}: {}", applyRecord.getId(), alarmError.getMessage());
-//        }
-//    }
 }
