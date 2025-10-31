@@ -91,4 +91,27 @@ public class ApplyService {
         List<ApplyRecord> records = applyRepository.findApplyRecordsByAppliedMemberId(memberId);
         applyRepository.deleteAll(records);
     }
+
+//    public void sendInvitationAlarm(ApplyRecord applyRecord) {
+//        try {
+//            RecruitPost post = applyRecord.getPost();
+//            CreateAlarmRequest request = CreateAlarmRequest.builder()
+//                    .alarmType(AlarmType.INVITED)
+//                    .sourceType(AlarmSourceType.APPLY_RESULT)
+//                    .sourceId(post.getId())
+//                    .fromUserId(post.getOwnerId())
+//                    .toUserId(applyRecord.getAppliedMemberId())
+//                    .title("지원이 수락되었어요")
+//                    .body(String.format("%s 구인글 지원이 수락되었습니다. 채팅방에서 대화를 시작해보세요.", post.getTitle()))
+//                    .data(Map.of(
+//                            "postId", String.valueOf(post.getId()),
+//                            "applyId", String.valueOf(applyRecord.getId()),
+//                            "matchStatus", applyRecord.getMatchStatus().name()
+//                    ))
+//                    .build();
+//            alarmClient.createAlarm(request);
+//        } catch (Exception alarmError) {
+//            log.warn("Failed to create invitation alarm for applyRecord {}: {}", applyRecord.getId(), alarmError.getMessage());
+//        }
+//    }
 }

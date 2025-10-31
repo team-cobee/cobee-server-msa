@@ -81,13 +81,13 @@ spring:
             - id: recruit
               uri: lb://RECRUIT-SERVICE
               predicates: Path=/recruit/**
-              filters:
-                - AuthorizationHeaderFilter
+#              filters:
+#                - AuthorizationHeaderFilter
             - id: alarm
               uri: lb://ALARM-SERVICE
               predicates: Path=/alarm/**
-              filters:
-                - AuthorizationHeaderFilter
+#              filters:
+#                - AuthorizationHeaderFilter
             - id: apply
               uri: lb://RECRUIT-SERVICE
               predicates: Path=/apply/**
@@ -101,6 +101,11 @@ spring:
             - id: comment
               uri: lb://RECRUIT-SERVICE
               predicates: Path=/comments/**
+              filters:
+                - AuthorizationHeaderFilter
+            - id: alarm
+              uri: lb://ALARM-SERVICE
+              predicates: Path=/alarm/**
               filters:
                 - AuthorizationHeaderFilter
 eureka:
