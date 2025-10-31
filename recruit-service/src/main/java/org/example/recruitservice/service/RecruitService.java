@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.common.apiPayload.response.ApiResponse;
 import org.example.recruitservice.client.MemberClient;
 import org.example.recruitservice.dto.MemberCoreResponse;
+import org.example.recruitservice.dto.map.RecruitMapFilterResponse;
 import org.example.recruitservice.dto.recruit.RecruitCoreResponse;
 import org.example.recruitservice.repository.RecruitRepository;
 import org.example.recruitservice.domain.Enum.RecruitStatus;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -118,5 +120,22 @@ public class RecruitService {
         // 해당 멤버가 작성한 모든 구인글을 찾아서 삭제
         List<RecruitPost> posts = recruitRepository.findAllByOwnerId(memberId);
         recruitRepository.deleteAll(posts);
+    }
+
+    public List<RecruitMapFilterResponse> getfilterRecruitPosts(Double latitude, Double longitude, Double radius,
+                                                                Integer recruitCount, Integer rentCostMin, Integer rentCostMax,
+                                                                Integer monthlyCostMin, Integer monthlyCostMax) {
+        List<RecruitPost> posts;
+
+        if (latitude != null && longitude != null && radius != null) {
+            posts = recruitRepository.findFilteredRecruitPosts(latitude, longitude, radius, recruitCount, rentCostMin,
+                    rentCostMax, monthlyCostMin, monthlyCostMax);
+        } else {
+            posts = recruitRepository.findFilteredRecruitPosts(null, null, null, recruitCount, rentCostMin, rentCostMax,
+                    monthlyCostMin, monthlyCostMax);
+        }
+        return posts.stream()
+                .map(RecruitMapFilterResponse::new)
+                .collect(Collectors.toList());
     }
 }
