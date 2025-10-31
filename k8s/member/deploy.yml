@@ -30,10 +30,10 @@ spec:
               value: http://config-service:8888
           resources:
             limits:
-              memory: "512Mi"
-              cpu: "250m"
+              memory: "1024Mi"
+              cpu: "500m"
             requests:
-              memory: "512Mi"
-              cpu: "250m"
+              memory: "1024Mi"
+              cpu: "500m"
       imagePullSecrets:
         - name: registry-credential
