@@ -27,10 +27,10 @@ spec:
               value: http://eureka-service:8761/eureka/
           resources:
             limits:
-              memory: "1024Mi"
-              cpu: "500m"
+              memory: "512Mi"
+              cpu: "250m"
             requests:
-              memory: "1024Mi"
-              cpu: "500m"
+              memory: "512Mi"
+              cpu: "250m"
       imagePullSecrets:
         - name: registry-credential
