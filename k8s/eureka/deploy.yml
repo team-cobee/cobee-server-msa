@@ -33,10 +33,10 @@ spec:
               value: "20000"
           resources:
             limits:
-              memory: "256Mi"
-              cpu: "100m"
+              memory: "1024Mi"
+              cpu: "500m"
             requests:
-              memory: "256Mi"
-              cpu: "100m"
+              memory: "1024Mi"
+              cpu: "500m"
       imagePullSecrets:
         - name: registry-credential
