@@ -1,4 +1,4 @@
-package org.example.alarmservice.dto;
+package org.example.common.dto.alarm;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
