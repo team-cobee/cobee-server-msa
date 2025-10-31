@@ -1,11 +1,9 @@
 package org.example.recruitservice.dto.map;
 
-import lombok.Builder;
 import lombok.Getter;
 import org.example.recruitservice.domain.RecruitPost;
 
 @Getter
-@Builder
 public class RecruitMapFilterResponse {
     private Long postId;
     private String title;
