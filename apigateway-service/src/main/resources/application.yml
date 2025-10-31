@@ -103,6 +103,11 @@ spring:
               predicates: Path=/comments/**
               filters:
                 - AuthorizationHeaderFilter
+            - id: alarm
+              uri: lb://ALARM-SERVICE
+              predicates: Path=/alarm/**
+              filters:
+                - AuthorizationHeaderFilter
 eureka:
   client:
     service-url:
