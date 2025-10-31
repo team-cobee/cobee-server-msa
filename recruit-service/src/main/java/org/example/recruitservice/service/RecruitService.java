@@ -146,14 +146,25 @@ public class RecruitService {
                 .map(RecruitMapFilterResponse::new)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public RecruitResponse createRecruitPostWithImages(RecruitRequest recruitRequest, Long memberId, MultipartFile[] images) {
+        // 1. 구인글 먼저 생성
+        RecruitResponse recruitResponse = createRecruitPost(recruitRequest, memberId);
+        Long postId = recruitResponse.getPostId();
+
+        if (images != null && images.length > 0 && !images[0].isEmpty()) {
+            addImages(postId, memberId, images);
+        }
+        return recruitResponse;
+    }
+
     @Transactional
     public List<String> addImages(Long postId, Long memberId, MultipartFile[] files) {
         ImageValidationUtil.validateMultipleImageFiles(files);
 
         RecruitPost post = recruitRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("구인글을 찾을 수 없습니다."));
-
-        // 본인 확인
         if (!post.getOwnerId().equals(memberId)) {
             throw new RuntimeException("본인의 구인글에만 이미지를 추가할 수 있습니다.");
         }
@@ -162,10 +173,6 @@ public class RecruitService {
 
         for (int i = 0; i < files.length; i++) {
             MultipartFile file = files[i];
-
-            // validateMultipleImageFiles가 file이 null이거나 empty인 경우도 검사해줍니다.
-            // (validateSingleImageFile 내부 로직 참고)
-
             String imageUrl = nhnStorageService.uploadFile(file).block();
             if (imageUrl != null) {
                 Images image = Images.builder()
