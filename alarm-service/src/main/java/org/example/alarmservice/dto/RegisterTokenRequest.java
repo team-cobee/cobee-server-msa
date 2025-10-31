@@ -9,8 +9,5 @@ import lombok.NoArgsConstructor;
 public class RegisterTokenRequest {
 
     @NotBlank
-    private String userId;
-
-    @NotBlank
     private String token;
 }
